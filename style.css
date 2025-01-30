@@ -38,7 +38,7 @@ body h1 {
 #game-board {
   display: grid;
   grid-template-columns: repeat(10, 30px); /* 10 columns */
-  grid-template-rows: repeat(11, 30px); /* 9 rows */
+  grid-template-rows: repeat(11, 30px); /* 11 rows */
   gap: 1px;
   background-color: black;
   border: 2px solid white;

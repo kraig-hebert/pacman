@@ -54,6 +54,7 @@ class Ghost {
         this.position.x === this.pacman.position.x &&
         this.position.y === this.pacman.position.y
       ) {
+        alert("You lose Batty Boy");
         this.stopMoving(); // Stop ghost movement
         removeEventListener();
         return;
@@ -78,7 +79,7 @@ class Ghost {
 
   beginMoving(removeEventListener) {
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(() => this.move(removeEventListener), 1000);
+    this.interval = setInterval(() => this.move(removeEventListener), 200);
   }
 
   stopMoving() {

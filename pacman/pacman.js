@@ -1,8 +1,10 @@
 class Pacman {
-  constructor(x, y, board, ghost) {
+  constructor(x, y, board, points, scoreBoard) {
     this.board = board;
     this.ghost = null;
+    this.points = points;
     this.position = { x, y };
+    this.scoreBoard = scoreBoard;
   }
 
   setGhost(ghost) {
@@ -19,16 +21,30 @@ class Pacman {
     if (direction === "ArrowLeft") newX -= 1;
     if (direction === "ArrowRight") newX += 1;
 
+    // check is new position is a fruit
+
     // Check if the new position is not a wall
     if (this.board.layout[newY][newX] !== 1) {
+      if (this.board.layout[newY][newX] === 2) {
+        this.scoreBoard.score += this.scoreBoard.foodPoint;
+        this.scoreBoard.totalFruit -= 1;
+      }
+      if (this.scoreBoard.totalFruit === 0) {
+        alert("You win Batty Boy");
+        this.ghost.stopMoving();
+        removeEventListener();
+      }
+      this.points.innerText = this.scoreBoard.score;
       this.board.layout[y][x] = 0; // clear old position
       this.board.layout[newY][newX] = "P"; // Set new position
       this.position = { x: newX, y: newY };
     }
+    // add 1 piont for each food eaten
     this.board.renderBoard();
 
+    // check if pacman has been caught by ghost
     if (newX === this.ghost.position.x && newY === this.ghost.position.y) {
-      this.board.layout[newY][newX] = "G";
+      alert("You lose Batty Boy");
       this.ghost.stopMoving();
       removeEventListener();
       this.board.renderBoard();
