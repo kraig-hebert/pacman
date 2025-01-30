@@ -19,14 +19,15 @@ class Ghost {
     this.visited[y][x] = true;
   }
 
-  move() {
+  move(removeEventListener) {
     // check if ghost has caught pacman....end game
     if (
       this.position.x === this.pacman.position.x &&
       this.position.y === this.pacman.position.y
     ) {
+      console.log("Game Over");
       this.stopMoving(); // Stop ghost movement
-      window.removeEventListener("keydown", handlePacmanMove);
+      removeEventListener();
       return;
     }
 
@@ -43,20 +44,15 @@ class Ghost {
 
       // If Pac-Man is found
       if (x === this.pacman.position.x && y === this.pacman.position.y) {
-        console.log("Path found", path);
         const nextMove = path[0]; // Get the first move in the path
-        console.log("Next move", nextMove);
         const newX = this.position.x + nextMove.dx;
         const newY = this.position.y + nextMove.dy;
-        console.log(x, y);
-        console.log(newX, newY);
 
         // restore cell value to previous value of current cell
         this.board.layout[this.position.y][this.position.x] =
           this.currentCellPreviousValue;
         // store next move cell value
         this.currentCellPreviousValue = this.board.layout[newY][newX];
-        console.log(this.currentCellPreviousValue);
         // Set new position
         this.board.layout[newY][newX] = "G";
         this.position = { x: newX, y: newY };
@@ -82,9 +78,9 @@ class Ghost {
     }
   }
 
-  beginMoving() {
+  beginMoving(removeEventListener) {
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(() => this.move(), 1000);
+    this.interval = setInterval(() => this.move(removeEventListener), 1000);
   }
 
   stopMoving() {

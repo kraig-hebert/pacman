@@ -19,7 +19,10 @@ board.renderBoard();
 const handlePacmanMove = (e) => pacman.move(e.key, board);
 startButton.addEventListener("click", () => {
   window.addEventListener("keydown", handlePacmanMove);
-  ghost.beginMoving();
+  const removeEventListener = () => {
+    window.removeEventListener("keydown", handlePacmanMove);
+  };
+  ghost.beginMoving(removeEventListener);
 });
 
 //reset board
