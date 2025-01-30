@@ -1,9 +1,15 @@
 class Pacman {
-  constructor(x, y) {
+  constructor(x, y, board, ghost) {
+    this.board = board;
+    this.ghost = null;
     this.position = { x, y };
   }
 
-  move(direction, board) {
+  setGhost(ghost) {
+    this.ghost = ghost;
+  }
+
+  move(direction, removeEventListener) {
     let { x, y } = this.position;
     let newX = x;
     let newY = y;
@@ -14,12 +20,19 @@ class Pacman {
     if (direction === "ArrowRight") newX += 1;
 
     // Check if the new position is not a wall
-    if (board.layout[newY][newX] !== 1) {
-      board.layout[y][x] = 0; // clear old position
-      board.layout[newY][newX] = "P"; // Set new position
+    if (this.board.layout[newY][newX] !== 1) {
+      this.board.layout[y][x] = 0; // clear old position
+      this.board.layout[newY][newX] = "P"; // Set new position
       this.position = { x: newX, y: newY };
     }
-    board.renderBoard();
+    this.board.renderBoard();
+
+    if (newX === this.ghost.position.x && newY === this.ghost.position.y) {
+      this.board.layout[newY][newX] = "G";
+      this.ghost.stopMoving();
+      removeEventListener();
+      this.board.renderBoard();
+    }
   }
 }
 

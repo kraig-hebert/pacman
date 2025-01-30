@@ -10,18 +10,19 @@ const resetButton = document.getElementById("reset-button");
 
 // initialize pacman and ghost
 const board = new Board(gameBoard);
-const pacman = new Pacman(4, 7);
+const pacman = new Pacman(4, 7, board);
 const ghost = new Ghost(3, 5, board, pacman);
+pacman.setGhost(ghost);
 
 board.renderBoard();
 
 // start game
-const handlePacmanMove = (e) => pacman.move(e.key, board);
+const removeEventListener = () =>
+  window.removeEventListener("keydown", handlePacmanMove);
+
+const handlePacmanMove = (e) => pacman.move(e.key, removeEventListener);
 startButton.addEventListener("click", () => {
   window.addEventListener("keydown", handlePacmanMove);
-  const removeEventListener = () => {
-    window.removeEventListener("keydown", handlePacmanMove);
-  };
   ghost.beginMoving(removeEventListener);
 });
 

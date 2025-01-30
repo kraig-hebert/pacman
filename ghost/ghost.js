@@ -20,17 +20,6 @@ class Ghost {
   }
 
   move(removeEventListener) {
-    // check if ghost has caught pacman....end game
-    if (
-      this.position.x === this.pacman.position.x &&
-      this.position.y === this.pacman.position.y
-    ) {
-      console.log("Game Over");
-      this.stopMoving(); // Stop ghost movement
-      removeEventListener();
-      return;
-    }
-
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
     this.visited = Array.from({ length: this.board.layout.length }, () =>
@@ -45,6 +34,7 @@ class Ghost {
       // If Pac-Man is found
       if (x === this.pacman.position.x && y === this.pacman.position.y) {
         const nextMove = path[0]; // Get the first move in the path
+        if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
         const newY = this.position.y + nextMove.dy;
 
@@ -58,6 +48,14 @@ class Ghost {
         this.position = { x: newX, y: newY };
 
         this.board.renderBoard();
+      }
+      // check if ghost has caught pacman....end game
+      if (
+        this.position.x === this.pacman.position.x &&
+        this.position.y === this.pacman.position.y
+      ) {
+        this.stopMoving(); // Stop ghost movement
+        removeEventListener();
         return;
       }
 
@@ -84,6 +82,8 @@ class Ghost {
   }
 
   stopMoving() {
+    this.board.layout[this.position.y][this.position.x] = "G";
+    this.board.renderBoard();
     clearInterval(this.interval);
     this.interval = null;
   }
