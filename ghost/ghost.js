@@ -88,6 +88,10 @@ class Ghost {
     clearInterval(this.interval);
     this.interval = null;
   }
+
+  setPosition(position) {
+    this.position = position;
+  }
 }
 
 export default Ghost;

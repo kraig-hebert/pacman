@@ -1,7 +1,9 @@
 class Board {
   constructor(gameBoard, layout) {
     this.gameBoard = gameBoard;
+    this.ghost = null;
     this.layout = layout;
+    this.pacman = null;
   }
 
   renderBoard() {
@@ -29,6 +31,11 @@ class Board {
         this.gameBoard.appendChild(div);
       });
     });
+  }
+
+  setGamePieces(ghost, pacman) {
+    this.ghost = ghost;
+    this.pacman = pacman;
   }
 
   setLayout(layout) {

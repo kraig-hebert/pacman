@@ -1,6 +1,6 @@
 class VeryHard {
   constructor() {
-    this.foodPoint = 1;
+    this.foodPoint = 8;
     this.layout = [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -16,10 +16,9 @@ class VeryHard {
     ];
     this.name = "very-hard";
     this.ghostPosition = { x: 3, y: 5 };
-    this.ghostSpeed = 1000;
+    this.ghostSpeed = 200;
     this.pacmanPosition = { x: 4, y: 7 };
-    this.powerFoodPoint = 3;
-    this.totalFood = 20;
+    this.powerFoodPoint = 24;
   }
 }
 

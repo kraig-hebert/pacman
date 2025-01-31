@@ -1,6 +1,8 @@
+// import game pieces
 import Board from "./board/board.js";
 import Ghost from "./ghost/ghost.js";
 import Pacman from "./pacman/pacman.js";
+import ScoreBoard from "./scoreboard/scoreboard.js";
 
 // import modes
 import Easy from "./board/mazes/easy.js";
@@ -22,17 +24,23 @@ const board = new Board(gameBoard, activeMode.layout);
 const getTotalFood = () =>
   board.layout.flat().filter((cell) => cell === 2).length;
 // create scoreboard
-const scoreBoard = {
-  foodPoint: activeMode.foodPoint,
-  powerFoodPoint: activeMode.powerFoodPoint,
-  score: 0,
-  totalFood: getTotalFood(),
+const scoreBoard = new ScoreBoard(
+  activeMode.foodPoint,
+  activeMode.powerFoodPoint,
+  getTotalFood()
+);
+
+// find grid location of ghost or pacman
+const getElementPosition = (element) => {
+  const y = board.layout.findIndex((row) => row.includes(element));
+  const x = board.layout[y].indexOf(element);
+  return { x, y };
 };
 
-const pacman = new Pacman(board, points, activeMode.pacmanPosition, scoreBoard);
-const ghost = new Ghost(board, pacman, activeMode.ghostPosition);
+const pacman = new Pacman(board, points, getElementPosition("P"), scoreBoard);
+const ghost = new Ghost(board, pacman, getElementPosition("G"));
 pacman.setGhost(ghost);
-
+board.setGamePieces(ghost, pacman);
 board.renderBoard();
 
 const removeEventListener = () =>
@@ -55,6 +63,13 @@ const handleMazeButtonClick = (e) => {
   else if (e.target.id === "hard") activeMode = new Hard();
   else if (e.target.id === "very-hard") activeMode = new VeryHard();
   board.setLayout(activeMode.layout);
+  ghost.setPosition(getElementPosition("G"));
+  pacman.setPosition(getElementPosition("P"));
+  scoreBoard.resetScoreBoard(
+    activeMode.foodPoint,
+    activeMode.powerFoodPoint,
+    getTotalFood()
+  );
   Array.from(mazeLinks).forEach((link) => {
     if (activeMode.name === link.id) link.classList.add("active-maze-button");
     else link.classList.remove("active-maze-button");

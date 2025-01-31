@@ -11,6 +11,10 @@ class Pacman {
     this.ghost = ghost;
   }
 
+  setPosition(position) {
+    this.position = position;
+  }
+
   move(direction, removeEventListener) {
     let { x, y } = this.position;
     let newX = x;
