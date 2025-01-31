@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
     "nodemon": "^3.1.9"
   }
 }

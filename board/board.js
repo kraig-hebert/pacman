@@ -1,23 +1,14 @@
 class Board {
-  constructor(gameBoard) {
+  constructor(gameBoard, layout) {
     this.gameBoard = gameBoard;
-    this.layout = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 1, 0, 1, 2, 1],
-      [1, 2, 1, "G", 0, 0, 0, 1, 2, 1],
-      [1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
-      [1, 2, 2, 2, "P", 2, 2, 2, 2, 1],
-      [1, 2, 1, 1, 1, 1, 1, 1, 2, 1],
-      [1, 2, 2, 2, 2, 2, 2, 2, 3, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
+    this.layout = layout;
   }
 
   renderBoard() {
     this.gameBoard.innerHTML = ""; // Clear board before rendering
+    // add maze links
+
+    // create game board
     this.layout.forEach((row, y) => {
       row.forEach((cell, x) => {
         const div = document.createElement("div");
@@ -39,6 +30,11 @@ class Board {
         this.gameBoard.appendChild(div);
       });
     });
+  }
+
+  setLayout(layout) {
+    this.layout = layout;
+    this.renderBoard();
   }
 }
 export default Board;

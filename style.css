@@ -35,13 +35,53 @@ body h1 {
 }
 
 /* Game Board */
+#game-board-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #game-board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(10, 30px); /* 10 columns */
   grid-template-rows: repeat(11, 30px); /* 11 rows */
   gap: 1px;
   background-color: black;
   border: 2px solid white;
+}
+
+#maze-links {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.maze-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 15px;
+  background-color: blue;
+  color: white;
+}
+
+.maze-button:hover {
+  background-color: white;
+  color: blue;
 }
 
 /* Game Buttons */
@@ -65,9 +105,19 @@ body h1 {
   color: white;
 }
 
+#start-button:hover {
+  background-color: white;
+  color: blue;
+}
+
 #reset-button {
   background-color: red;
   color: white;
+}
+
+#reset-button:hover {
+  background-color: white;
+  color: red;
 }
 
 /* Walls */
@@ -109,7 +159,7 @@ body h1 {
   line-height: 30px;
 }
 
-/* Ghosts */
+/* Ghost */
 .ghost {
   color: red;
   font-size: 18px;
