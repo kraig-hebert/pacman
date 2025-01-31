@@ -6,7 +6,6 @@ class Board {
 
   renderBoard() {
     this.gameBoard.innerHTML = ""; // Clear board before rendering
-    // add maze links
 
     // create game board
     this.layout.forEach((row, y) => {
@@ -33,6 +32,8 @@ class Board {
   }
 
   setLayout(layout) {
+    this.gameBoard.style.gridTemplateColumns = `repeat(${layout[0].length}, 30px)`;
+    this.gameBoard.style.gridTemplateRows = `repeat(${layout.length}, 30px)`;
     this.layout = layout;
     this.renderBoard();
   }

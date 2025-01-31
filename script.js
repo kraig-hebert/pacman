@@ -19,18 +19,18 @@ const points = document.getElementById("points");
 let activeMode = new Easy();
 const board = new Board(gameBoard, activeMode.layout);
 
-const getTotalFruit = () =>
+const getTotalFood = () =>
   board.layout.flat().filter((cell) => cell === 2).length;
 // create scoreboard
 const scoreBoard = {
   foodPoint: activeMode.foodPoint,
   powerFoodPoint: activeMode.powerFoodPoint,
   score: 0,
-  totalFruit: activeMode.totalFood,
+  totalFood: getTotalFood(),
 };
 
-const pacman = new Pacman(4, 7, board, points, scoreBoard);
-const ghost = new Ghost(3, 5, board, pacman);
+const pacman = new Pacman(board, points, activeMode.pacmanPosition, scoreBoard);
+const ghost = new Ghost(board, pacman, activeMode.ghostPosition);
 pacman.setGhost(ghost);
 
 board.renderBoard();
@@ -47,27 +47,22 @@ startButton.addEventListener("click", () => {
 });
 
 //reset board
-resetButton.addEventListener("click", () => {
-  window.location.reload();
-});
+resetButton.addEventListener("click", () => window.location.reload());
 
 const handleMazeButtonClick = (e) => {
-  if (e.target.id === "easy") {
-    activeMode = new Easy();
-    board.setLayout(activeMode.layout);
-  } else if (e.target.id === "medium") {
-    activeMode = new Medium();
-    board.setLayout(activeMode.layout);
-  } else if (e.target.id === "hard") {
-    activeMode = new Hard();
-    board.setLayout(activeMode.layout);
-  } else if (e.target.id === "very-hard") {
-    activeMode = new VeryHard();
-    board.setLayout(activeMode.layout);
-  }
+  if (e.target.id === "easy") activeMode = new Easy();
+  else if (e.target.id === "medium") activeMode = new Medium();
+  else if (e.target.id === "hard") activeMode = new Hard();
+  else if (e.target.id === "very-hard") activeMode = new VeryHard();
+  board.setLayout(activeMode.layout);
+  Array.from(mazeLinks).forEach((link) => {
+    if (activeMode.name === link.id) link.classList.add("active-maze-button");
+    else link.classList.remove("active-maze-button");
+  });
 };
 
 // add eventListeners to maze links
-Array.from(mazeLinks).forEach((link) =>
-  link.addEventListener("click", handleMazeButtonClick)
-);
+Array.from(mazeLinks).forEach((link) => {
+  if (activeMode.name === link.id) link.classList.add("active-maze-button");
+  link.addEventListener("click", handleMazeButtonClick);
+});

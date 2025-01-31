@@ -19,7 +19,6 @@ class Easy {
     this.ghostSpeed = 1000;
     this.pacmanPosition = { x: 4, y: 7 };
     this.powerFoodPoint = 3;
-    this.totalFood = 20;
   }
 }
 

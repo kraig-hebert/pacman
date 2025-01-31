@@ -1,9 +1,9 @@
 class Pacman {
-  constructor(x, y, board, points, scoreBoard) {
+  constructor(board, points, position, scoreBoard) {
     this.board = board;
     this.ghost = null;
     this.points = points;
-    this.position = { x, y };
+    this.position = position;
     this.scoreBoard = scoreBoard;
   }
 
@@ -27,9 +27,9 @@ class Pacman {
     if (this.board.layout[newY][newX] !== 1) {
       if (this.board.layout[newY][newX] === 2) {
         this.scoreBoard.score += this.scoreBoard.foodPoint;
-        this.scoreBoard.totalFruit -= 1;
+        this.scoreBoard.totalFood -= 1;
       }
-      if (this.scoreBoard.totalFruit === 0) {
+      if (this.scoreBoard.totalFood === 0) {
         alert("You win Batty Boy");
         this.ghost.stopMoving();
         removeEventListener();

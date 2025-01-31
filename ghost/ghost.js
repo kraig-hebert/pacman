@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(x, y, board, pacman) {
+  constructor(board, pacman, position) {
     this.board = board;
     this.currentCellPreviousValue = 0;
     // up, down, left, right
@@ -10,13 +10,13 @@ class Ghost {
       { dx: 1, dy: 0 },
     ];
     this.interval = null;
-    this.queue = [{ x, y, path: [] }];
+    this.queue = [{ x: position.x, y: position.y, path: [] }];
     this.pacman = pacman;
-    this.position = { x, y };
-    this.visited = Array.from({ length: this.board.layout.length }, () =>
+    this.position = position;
+    this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
     );
-    this.visited[y][x] = true;
+    this.visited[position.y][position.x] = true;
   }
 
   move(removeEventListener) {

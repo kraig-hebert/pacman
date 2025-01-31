@@ -84,6 +84,11 @@ body h1 {
   color: blue;
 }
 
+.active-maze-button {
+  background-color: white;
+  color: blue;
+}
+
 /* Game Buttons */
 .game-buttons {
   display: flex;
