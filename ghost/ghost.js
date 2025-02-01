@@ -13,7 +13,7 @@ class Ghost {
     this.queue = [{ x: position.x, y: position.y, path: [] }];
     this.pacman = pacman;
     this.position = position;
-    this.speed - speed;
+    this.speed = speed;
     this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
     );
@@ -81,7 +81,6 @@ class Ghost {
   }
 
   beginMoving(removeEventListener) {
-    console.log(this.speed);
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
     this.interval = setInterval(
       () => this.move(removeEventListener),
