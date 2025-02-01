@@ -1,9 +1,11 @@
 class Board {
-  constructor(gameBoard, layout) {
+  constructor(eastWarpPosition, gameBoard, layout, westWarpPostition) {
+    this.eastWarpPosition = eastWarpPosition;
     this.gameBoard = gameBoard;
     this.ghost = null;
     this.layout = layout;
     this.pacman = null;
+    this.westWarpPostition = westWarpPostition;
   }
 
   renderBoard() {
@@ -25,6 +27,14 @@ class Board {
         } else if (cell === "G") {
           div.classList.add("ghost");
           div.textContent = "KH";
+        } else if (cell === "<") {
+          div.id = "warp-west";
+          div.classList.add("warp-square");
+          div.textContent = "<";
+        } else if (cell === ">") {
+          div.id = "warp-east";
+          div.classList.add("warp-square");
+          div.textContent = ">";
         } else {
           div.classList.add("empty");
         }
@@ -43,6 +53,11 @@ class Board {
     this.gameBoard.style.gridTemplateRows = `repeat(${layout.length}, 30px)`;
     this.layout = layout;
     this.renderBoard();
+  }
+
+  setWarpSquares(eastWarpPosition, westWarpPosition) {
+    this.eastWarpPosition = eastWarpPosition;
+    this.westWarpPosition = westWarpPosition;
   }
 }
 export default Board;

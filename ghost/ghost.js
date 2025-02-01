@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(board, pacman, position) {
+  constructor(board, pacman, position, speed) {
     this.board = board;
     this.currentCellPreviousValue = 0;
     // up, down, left, right
@@ -13,6 +13,7 @@ class Ghost {
     this.queue = [{ x: position.x, y: position.y, path: [] }];
     this.pacman = pacman;
     this.position = position;
+    this.speed - speed;
     this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
     );
@@ -67,6 +68,8 @@ class Ghost {
 
         if (
           this.board.layout[newY][newX] !== 1 && // Not a wall
+          this.board.layout[newY][newX] !== ">" && // Not a warp
+          this.board.layout[newY][newX] !== "<" && // Not a warp
           !this.visited[newY][newX] && // Not already visited
           this.board.layout[newY][newX] !== "G" // Avoid other ghosts
         ) {
@@ -78,8 +81,12 @@ class Ghost {
   }
 
   beginMoving(removeEventListener) {
+    console.log(this.speed);
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(() => this.move(removeEventListener), 200);
+    this.interval = setInterval(
+      () => this.move(removeEventListener),
+      this.speed
+    );
   }
 
   stopMoving() {
@@ -91,6 +98,11 @@ class Ghost {
 
   setPosition(position) {
     this.position = position;
+  }
+
+  setSpeed(speed) {
+    console.log(speed);
+    this.speed = speed;
   }
 }
 

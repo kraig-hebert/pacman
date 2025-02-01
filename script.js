@@ -10,6 +10,8 @@ import Medium from "./board/mazes/medium.js";
 import Hard from "./board/mazes/hard.js";
 import VeryHard from "./board/mazes/veryHard.js";
 
+import * as helpers from "./helpers/helpers.js";
+
 // collect game elements
 const gameBoard = document.getElementById("game-board");
 const mazeLinks = document.getElementsByClassName("maze-button");
@@ -19,7 +21,12 @@ const points = document.getElementById("points");
 
 // initialize game
 let activeMode = new Easy();
-const board = new Board(gameBoard, activeMode.layout);
+const board = new Board(
+  helpers.getElementPosition(">", activeMode.layout),
+  gameBoard,
+  activeMode.layout,
+  helpers.getElementPosition("<", activeMode.layout)
+);
 
 const getTotalFood = () =>
   board.layout.flat().filter((cell) => cell === 2).length;
@@ -30,15 +37,18 @@ const scoreBoard = new ScoreBoard(
   getTotalFood()
 );
 
-// find grid location of ghost or pacman
-const getElementPosition = (element) => {
-  const y = board.layout.findIndex((row) => row.includes(element));
-  const x = board.layout[y].indexOf(element);
-  return { x, y };
-};
-
-const pacman = new Pacman(board, points, getElementPosition("P"), scoreBoard);
-const ghost = new Ghost(board, pacman, getElementPosition("G"));
+const pacman = new Pacman(
+  board,
+  points,
+  helpers.getElementPosition("P", board.layout),
+  scoreBoard
+);
+const ghost = new Ghost(
+  board,
+  pacman,
+  helpers.getElementPosition("G", board.layout),
+  activeMode.ghostSpeed
+);
 pacman.setGhost(ghost);
 board.setGamePieces(ghost, pacman);
 board.renderBoard();
@@ -63,8 +73,14 @@ const handleMazeButtonClick = (e) => {
   else if (e.target.id === "hard") activeMode = new Hard();
   else if (e.target.id === "very-hard") activeMode = new VeryHard();
   board.setLayout(activeMode.layout);
-  ghost.setPosition(getElementPosition("G"));
-  pacman.setPosition(getElementPosition("P"));
+  board.setWarpSquares(
+    helpers.getElementPosition(">", board.layout),
+    helpers.getElementPosition("<", board.layout)
+  );
+
+  ghost.setPosition(helpers.getElementPosition("G", board.layout));
+  ghost.setSpeed(activeMode.ghostSpeed);
+  pacman.setPosition(helpers.getElementPosition("P", board.layout));
   scoreBoard.resetScoreBoard(
     activeMode.foodPoint,
     activeMode.powerFoodPoint,

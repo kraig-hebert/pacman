@@ -172,3 +172,10 @@ body h1 {
   text-align: center;
   line-height: 30px;
 }
+
+.warp-square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
