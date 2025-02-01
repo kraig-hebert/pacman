@@ -64,14 +64,17 @@ startButton.addEventListener("click", () => {
   ghost.beginMoving(removeEventListener);
 });
 
-//reset board
-resetButton.addEventListener("click", () => window.location.reload());
-
-const handleMazeButtonClick = (e) => {
+const handleLevelReset = (e) => {
+  console.log(e);
   if (e.target.id === "easy") activeMode = new Easy();
   else if (e.target.id === "medium") activeMode = new Medium();
   else if (e.target.id === "hard") activeMode = new Hard();
   else if (e.target.id === "very-hard") activeMode = new VeryHard();
+  Array.from(mazeLinks).forEach((link) => {
+    if (activeMode.name === link.id) link.classList.add("active-maze-button");
+    else link.classList.remove("active-maze-button");
+  });
+  ghost.stopMoving();
   board.setLayout(activeMode.layout);
   board.setWarpSquares(
     helpers.getElementPosition(">", board.layout),
@@ -84,16 +87,18 @@ const handleMazeButtonClick = (e) => {
   scoreBoard.resetScoreBoard(
     activeMode.foodPoint,
     activeMode.powerFoodPoint,
-    getTotalFood()
+    getTotalFood(),
+    points
   );
-  Array.from(mazeLinks).forEach((link) => {
-    if (activeMode.name === link.id) link.classList.add("active-maze-button");
-    else link.classList.remove("active-maze-button");
-  });
 };
 
 // add eventListeners to maze links
 Array.from(mazeLinks).forEach((link) => {
   if (activeMode.name === link.id) link.classList.add("active-maze-button");
-  link.addEventListener("click", handleMazeButtonClick);
+  link.addEventListener("click", handleLevelReset);
 });
+
+//reset board
+resetButton.addEventListener("click", () =>
+  handleLevelReset({ target: { id: activeMode.name } })
+);

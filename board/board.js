@@ -4,11 +4,13 @@ class Board {
     this.gameBoard = gameBoard;
     this.ghost = null;
     this.layout = layout;
+    console.log(this.layout);
     this.pacman = null;
     this.westWarpPostition = westWarpPostition;
   }
 
   renderBoard() {
+    console.log("test");
     this.gameBoard.innerHTML = ""; // Clear board before rendering
 
     // create game board

@@ -36,16 +36,15 @@ class Pacman {
       }
       // warp pacman to the east side of board
       else if (this.board.layout[newY][newX] === "<") {
-        console.log(this.board.eastWarpPosition);
         newX = this.board.eastWarpPosition.x - 1;
       } else if (this.board.layout[newY][newX] === ">") {
-        console.log(this.board.westWarpPosition);
         newX = this.board.westWarpPosition.x + 1;
       }
       if (this.scoreBoard.totalFood === 0) {
         // check if all food has been eaten and claim victory
-        alert("You win Batty Boy");
         this.ghost.stopMoving();
+
+        alert("You win Batty Boy");
         removeEventListener();
       }
       this.points.innerText = this.scoreBoard.score;

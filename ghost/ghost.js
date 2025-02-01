@@ -55,8 +55,10 @@ class Ghost {
         this.position.x === this.pacman.position.x &&
         this.position.y === this.pacman.position.y
       ) {
-        alert("You lose Batty Boy");
         this.stopMoving(); // Stop ghost movement
+        this.board.layout[this.position.y][this.position.x] = "G";
+        this.board.renderBoard();
+        alert("You lose Batty Boy");
         removeEventListener();
         return;
       }
@@ -89,8 +91,6 @@ class Ghost {
   }
 
   stopMoving() {
-    this.board.layout[this.position.y][this.position.x] = "G";
-    this.board.renderBoard();
     clearInterval(this.interval);
     this.interval = null;
   }
@@ -100,7 +100,6 @@ class Ghost {
   }
 
   setSpeed(speed) {
-    console.log(speed);
     this.speed = speed;
   }
 }
