@@ -106,13 +106,13 @@ body h1 {
   margin: 10px;
 }
 #start-button {
-  background-color: blue;
+  background-color: green;
   color: white;
 }
 
 #start-button:hover {
   background-color: white;
-  color: blue;
+  color: green;
 }
 
 #reset-button {
