@@ -1,16 +1,17 @@
+import GhostController from "../ghost/ghostController.js";
+
 class Board {
-  constructor(eastWarpPosition, gameBoard, layout, westWarpPostition) {
-    this.eastWarpPosition = eastWarpPosition;
+  constructor(gameBoard, layout) {
+    this.eastWarpPosition = this.findElementPosition(">");
     this.gameBoard = gameBoard;
     this.ghost = null;
+    this.ghostController = new GhostController();
     this.layout = layout;
-    console.log(this.layout);
     this.pacman = null;
-    this.westWarpPostition = westWarpPostition;
+    this.westWarpPostition = this.findElementPosition("<");
   }
 
   renderBoard() {
-    console.log("test");
     this.gameBoard.innerHTML = ""; // Clear board before rendering
 
     // create game board
@@ -60,6 +61,17 @@ class Board {
   setWarpSquares(eastWarpPosition, westWarpPosition) {
     this.eastWarpPosition = eastWarpPosition;
     this.westWarpPosition = westWarpPosition;
+  }
+
+  findElementPosition(element) {
+    let x, y;
+    try {
+      y = boardLayout.findIndex((row) => row.includes(element));
+      x = boardLayout[y].indexOf(element);
+    } catch (e) {
+      if (e.name == "TypeError") return false;
+    }
+    return { x, y };
   }
 }
 export default Board;
