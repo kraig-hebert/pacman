@@ -1,6 +1,5 @@
 // import game pieces
 import Board from "./board/board.js";
-import Ghost from "./ghost/ghost.js";
 import Pacman from "./pacman/pacman.js";
 import ScoreBoard from "./scoreboard/scoreboard.js";
 
@@ -11,6 +10,7 @@ import Hard from "./board/mazes/hard.js";
 import VeryHard from "./board/mazes/veryHard.js";
 
 import * as helpers from "./helpers/helpers.js";
+import GhostController from "./ghost/ghostController.js";
 
 // collect game elements
 const gameBoard = document.getElementById("game-board");
@@ -38,14 +38,14 @@ const pacman = new Pacman(
   helpers.getElementPosition("P", board.layout),
   scoreBoard
 );
-const ghost = new Ghost(
+const ghostController = new GhostController(
   board,
+  board.findGhostPositions(),
   pacman,
-  helpers.getElementPosition("G", board.layout),
   activeMode.ghostSpeed
 );
-pacman.setGhost(ghost);
-board.setGamePieces(ghost, pacman);
+
+pacman.setGhostController(ghostController);
 board.renderBoard();
 
 const removeKeydownEventListener = () =>
@@ -56,7 +56,7 @@ const handlePacmanMove = (e) => pacman.move(e.key, removeKeydownEventListener);
 // start game
 startButton.addEventListener("click", () => {
   window.addEventListener("keydown", handlePacmanMove);
-  ghost.beginMoving(removeKeydownEventListener);
+  ghostController.startGhosts(removeKeydownEventListener);
 });
 
 const handleLevelReset = (e) => {
@@ -69,16 +69,13 @@ const handleLevelReset = (e) => {
     else link.classList.remove("active-maze-button");
   });
   removeKeydownEventListener();
-  ghost.stopMoving();
-  board.setLayout(activeMode.layout);
-  board.setWarpSquares(
-    helpers.getElementPosition(">", board.layout),
-    helpers.getElementPosition("<", board.layout)
+  ghostController.stopGhosts();
+  board.resetBoard(activeMode.layout);
+  ghostController.resetGhosts(
+    board.findGhostPositions(),
+    activeMode.ghostSpeed
   );
-
-  ghost.setPosition(helpers.getElementPosition("G", board.layout));
-  ghost.setSpeed(activeMode.ghostSpeed);
-  pacman.setPosition(helpers.getElementPosition("P", board.layout));
+  pacman.setPosition(board.findSingleElementPosition("P"));
   scoreBoard.resetScoreBoard(
     activeMode.foodPoint,
     activeMode.powerFoodPoint,

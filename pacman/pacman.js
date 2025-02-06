@@ -1,17 +1,18 @@
 class Pacman {
   constructor(board, points, position, scoreBoard) {
     this.board = board;
-    this.ghost = null;
+    this.ghostController = null;
     this.points = points;
     this.position = position;
     this.scoreBoard = scoreBoard;
   }
 
-  setGhost(ghost) {
-    this.ghost = ghost;
+  setGhostController(ghostController) {
+    this.ghostController = ghostController;
   }
 
   setPosition(position) {
+    console.log(position);
     this.position = position;
   }
 
@@ -28,6 +29,7 @@ class Pacman {
     // check is new position is a fruit
 
     // Check if the new position is not a wall
+    console.log(this.board.layout);
     if (this.board.layout[newY][newX] !== 1) {
       // check if the new position is a food pellet
       if (this.board.layout[newY][newX] === 2) {
@@ -42,7 +44,7 @@ class Pacman {
       }
       if (this.scoreBoard.totalFood === 0) {
         // check if all food has been eaten and claim victory
-        this.ghost.stopMoving();
+        this.ghostController.stopGhosts();
 
         alert("You win Batty Boy");
         removeEventListener();
@@ -55,13 +57,15 @@ class Pacman {
     // add 1 piont for each food eaten
     this.board.renderBoard();
 
-    // check if pacman has been caught by ghost
-    if (newX === this.ghost.position.x && newY === this.ghost.position.y) {
-      alert("You lose Batty Boy");
-      this.ghost.stopMoving();
-      removeEventListener();
-      this.board.renderBoard();
-    }
+    // check if pacman has run into any ghost
+    this.ghostController.ghostList.forEach((ghost) => {
+      if (newX === ghost.position.x && newY === ghost.position.y) {
+        alert("You lose Batty Boy");
+        this.ghostController.stopGhosts();
+        removeEventListener();
+        this.board.renderBoard();
+      }
+    });
   }
 }
 

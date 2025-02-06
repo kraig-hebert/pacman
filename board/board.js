@@ -1,14 +1,9 @@
-import GhostController from "../ghost/ghostController.js";
-
 class Board {
   constructor(gameBoard, layout) {
-    this.eastWarpPosition = this.findElementPosition(">");
+    this.eastWarpPosition = this.findSingleElementPosition(">");
     this.gameBoard = gameBoard;
-    this.ghost = null;
-    this.ghostController = new GhostController();
     this.layout = layout;
-    this.pacman = null;
-    this.westWarpPostition = this.findElementPosition("<");
+    this.westWarpPostition = this.findSingleElementPosition("<");
   }
 
   renderBoard() {
@@ -46,32 +41,36 @@ class Board {
     });
   }
 
-  setGamePieces(ghost, pacman) {
-    this.ghost = ghost;
-    this.pacman = pacman;
-  }
-
-  setLayout(layout) {
+  resetBoard(layout) {
     this.gameBoard.style.gridTemplateColumns = `repeat(${layout[0].length}, 30px)`;
     this.gameBoard.style.gridTemplateRows = `repeat(${layout.length}, 30px)`;
     this.layout = layout;
     this.renderBoard();
+    this.eastWarpPosition = this.findSingleElementPosition(">");
+    this.westWarpPosition = this.findSingleElementPosition("<");
   }
 
-  setWarpSquares(eastWarpPosition, westWarpPosition) {
-    this.eastWarpPosition = eastWarpPosition;
-    this.westWarpPosition = westWarpPosition;
-  }
-
-  findElementPosition(element) {
+  findSingleElementPosition(element) {
     let x, y;
     try {
-      y = boardLayout.findIndex((row) => row.includes(element));
-      x = boardLayout[y].indexOf(element);
+      y = this.layout.findIndex((row) => row.includes(element));
+      x = this.layout[y].indexOf(element);
     } catch (e) {
       if (e.name == "TypeError") return false;
     }
+    console.log(x, y);
     return { x, y };
+  }
+
+  findGhostPositions() {
+    const ghostPositionList = [];
+    this.layout.forEach((row, rowIndex) => {
+      row.forEach((element, elementIndex) => {
+        if (element === "G")
+          ghostPositionList.push({ x: elementIndex, y: rowIndex });
+      });
+    });
+    return ghostPositionList;
   }
 }
 export default Board;
