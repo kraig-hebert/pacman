@@ -32,7 +32,7 @@ class Ghost {
     while (this.queue.length > 0) {
       const { x, y, path } = this.queue.shift();
 
-      // If Pac-Man is found
+      // If Pac-Man is found while exploring move ghost one square closer to pacman
       if (x === this.pacman.position.x && y === this.pacman.position.y) {
         const nextMove = path[0]; // Get the first move in the path
         if (!nextMove) return;

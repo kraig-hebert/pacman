@@ -138,9 +138,7 @@ class Hard {
       ],
     ];
     this.name = "hard";
-    this.ghostPosition = { x: 3, y: 5 };
     this.ghostSpeed = 400;
-    this.pacmanPosition = { x: 4, y: 7 };
     this.powerFoodPoint = 12;
   }
 }

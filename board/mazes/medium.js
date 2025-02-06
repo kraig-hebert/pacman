@@ -19,9 +19,7 @@ class Medium {
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     this.name = "medium";
-    this.ghostPosition = { x: 3, y: 5 };
     this.ghostSpeed = 700;
-    this.pacmanPosition = { x: 4, y: 7 };
     this.powerFoodPoint = 6;
   }
 }

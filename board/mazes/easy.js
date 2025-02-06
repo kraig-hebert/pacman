@@ -15,9 +15,7 @@ class Easy {
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     this.name = "easy";
-    this.ghostPosition = { x: 3, y: 5 };
     this.ghostSpeed = 1000;
-    this.pacmanPosition = { x: 4, y: 7 };
     this.powerFoodPoint = 3;
   }
 }
