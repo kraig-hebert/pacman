@@ -15,7 +15,6 @@ class GhostController {
   }
 
   startGhosts(removeEventListener) {
-    console.log("start");
     this.ghostList.forEach((ghost, index) =>
       setTimeout(ghost.beginMoving(removeEventListener), index * 1000)
     );

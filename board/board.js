@@ -58,7 +58,6 @@ class Board {
     } catch (e) {
       if (e.name == "TypeError") return false;
     }
-    console.log(x, y);
     return { x, y };
   }
 

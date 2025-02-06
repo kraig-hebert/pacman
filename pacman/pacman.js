@@ -12,7 +12,6 @@ class Pacman {
   }
 
   setPosition(position) {
-    console.log(position);
     this.position = position;
   }
 
@@ -29,7 +28,6 @@ class Pacman {
     // check is new position is a fruit
 
     // Check if the new position is not a wall
-    console.log(this.board.layout);
     if (this.board.layout[newY][newX] !== 1) {
       // check if the new position is a food pellet
       if (this.board.layout[newY][newX] === 2) {
