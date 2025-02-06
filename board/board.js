@@ -71,5 +71,9 @@ class Board {
     });
     return ghostPositionList;
   }
+
+  getTotalFood() {
+    return this.layout.flat().filter((cell) => cell === 2).length;
+  }
 }
 export default Board;

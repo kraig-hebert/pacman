@@ -23,19 +23,17 @@ const points = document.getElementById("points");
 let activeMode = new Easy();
 const board = new Board(gameBoard, activeMode.layout);
 
-const getTotalFood = () =>
-  board.layout.flat().filter((cell) => cell === 2).length;
 // create scoreboard
 const scoreBoard = new ScoreBoard(
   activeMode.foodPoint,
   activeMode.powerFoodPoint,
-  getTotalFood()
+  board.getTotalFood()
 );
 
 const pacman = new Pacman(
   board,
   points,
-  helpers.getElementPosition("P", board.layout),
+  board.findSingleElementPosition("P"),
   scoreBoard
 );
 const ghostController = new GhostController(
@@ -76,12 +74,7 @@ const handleLevelReset = (e) => {
     activeMode.ghostSpeed
   );
   pacman.setPosition(board.findSingleElementPosition("P"));
-  scoreBoard.resetScoreBoard(
-    activeMode.foodPoint,
-    activeMode.powerFoodPoint,
-    getTotalFood(),
-    points
-  );
+  scoreBoard.resetScoreBoard(activeMode, board.getTotalFood(), points);
 };
 
 // add eventListeners to maze links

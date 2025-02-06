@@ -6,12 +6,25 @@ class ScoreBoard {
     this.totalFood = totalFood;
   }
 
-  resetScoreBoard(foodPoint, powerFoodPoint, totalFood, pointsElement) {
-    this.foodPoint = foodPoint;
-    this.powerFoodPoint = powerFoodPoint;
+  resetScoreBoard(activeMode, totalFood, pointsElement) {
+    this.foodPoint = activeMode.foodPoint;
+    this.powerFoodPoint = activeMode.powerFoodPoint;
     this.score = 0;
     this.totalFood = totalFood;
     pointsElement.innerText = this.score;
+  }
+
+  addFoodPoint() {
+    this.score += this.foodPoint;
+    this.subtractFromTotalFood(1);
+  }
+
+  addPowerFoodPoint() {
+    this.score += this.powerFoodPoint;
+  }
+
+  subtractFromTotalFood(amount) {
+    this.totalFood -= amount;
   }
 }
 
