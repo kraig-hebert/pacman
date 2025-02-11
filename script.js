@@ -26,6 +26,7 @@ const board = new Board(gameBoard, activeMode.layout);
 // create scoreboard
 const scoreBoard = new ScoreBoard(
   activeMode.foodPoint,
+  activeMode.ghostPoint,
   activeMode.powerFoodPoint,
   board.getTotalFood()
 );

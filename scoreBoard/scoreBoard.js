@@ -1,6 +1,7 @@
 class ScoreBoard {
-  constructor(foodPoint, powerFoodPoint, totalFood) {
+  constructor(foodPoint, ghostPoint, powerFoodPoint, totalFood) {
     this.foodPoint = foodPoint;
+    this.ghostPoint = ghostPoint;
     this.powerFoodPoint = powerFoodPoint;
     this.score = 0;
     this.totalFood = totalFood;
@@ -17,6 +18,10 @@ class ScoreBoard {
   addFoodPoint() {
     this.score += this.foodPoint;
     this.subtractFromTotalFood(1);
+  }
+
+  addGhostPoint() {
+    this.score += this.ghostPoint;
   }
 
   addPowerFoodPoint() {

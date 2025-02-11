@@ -2,8 +2,10 @@ class Pacman {
   constructor(board, points, position, scoreBoard) {
     this.board = board;
     this.ghostController = null;
+    this.mode = "normal"; // normal, power
     this.points = points;
     this.position = position;
+    this.powerModeTimeout = null; // Timeout for power mode duration
     this.scoreBoard = scoreBoard;
   }
 
@@ -13,6 +15,20 @@ class Pacman {
 
   setPosition(position) {
     this.position = position;
+  }
+
+  activatePowerMode() {
+    console.log("powermode");
+    this.scoreBoard.addPowerFoodPoint();
+    this.ghostController.changeMode("frightened");
+    this.mode = "power";
+    this.powerModeTimeout = setTimeout(() => this.cancelPowerMode(), 10000);
+  }
+
+  cancelPowerMode() {
+    console.log("cancelpower");
+    this.mode = "normal";
+    this.ghostController.changeMode("chase");
   }
 
   move(direction, removeEventListener) {
@@ -31,9 +47,8 @@ class Pacman {
     if (this.board.layout[newY][newX] !== 1) {
       // check if the new position is a food pellet
       if (this.board.layout[newY][newX] === 2) this.scoreBoard.addFoodPoint();
-      // check if the new position is a power food pellet
-      else if (this.board.layout[newY][newX] === 3)
-        this.scoreBoard.addPowerFoodPoint();
+      // check if the new position is a power food pellet and set mode to power
+      else if (this.board.layout[newY][newX] === 3) this.activatePowerMode();
       // check if warp square and warp pacman to opposite side of board
       else if (this.board.layout[newY][newX] === "<")
         newX = this.board.eastWarpPosition.x - 1;
@@ -57,11 +72,18 @@ class Pacman {
 
     // check if pacman has run into any ghost
     this.ghostController.ghostList.forEach((ghost) => {
-      if (newX === ghost.position.x && newY === ghost.position.y) {
-        alert("You lose Batty Boy");
-        this.ghostController.stopGhosts();
-        removeEventListener();
-        this.board.renderBoard();
+      if (this.mode === "normal") {
+        if (newX === ghost.position.x && newY === ghost.position.y) {
+          alert("You lose Batty Boy");
+          this.ghostController.stopGhosts();
+          removeEventListener();
+          this.board.renderBoard();
+        }
+      } else if (this.mode === "power") {
+        if (newX === ghost.position.x && newY === ghost.position.y) {
+          this.ghostController.changeMode("eaten");
+          this.scoreBoard.addGhostPoint();
+        }
       }
     });
   }

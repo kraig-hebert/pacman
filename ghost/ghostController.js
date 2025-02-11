@@ -5,8 +5,7 @@ class GhostController {
     this.board = board;
     this.pacman = pacman;
     this.speed = speed;
-    // ghost modes: chase, scatter, frightened, eaten
-    this.mode = "chase";
+    this.mode = "chase"; // chase, scatter, frightened, eaten
     this.ghostList = this.setGhostList(ghostPositionList);
   }
 
