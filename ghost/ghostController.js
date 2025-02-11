@@ -5,12 +5,15 @@ class GhostController {
     this.board = board;
     this.pacman = pacman;
     this.speed = speed;
+    // ghost modes: chase, scatter, frightened, eaten
+    this.mode = "chase";
     this.ghostList = this.setGhostList(ghostPositionList);
   }
 
   setGhostList(ghostPositionList) {
     return ghostPositionList.map(
-      (position) => new Ghost(this.board, this.pacman, position, this.speed)
+      (position) =>
+        new Ghost(this.board, this.mode, this.pacman, position, this.speed)
     );
   }
 
@@ -26,8 +29,16 @@ class GhostController {
 
   resetGhosts(ghostPositionList, speed) {
     this.ghostList = ghostPositionList.map(
-      (position) => new Ghost(this.board, this.pacman, position, speed)
+      (position) =>
+        new Ghost(this.board, this.mode, this.pacman, position, speed)
     );
+  }
+
+  changeMode(newMode) {
+    this.mode = newMode;
+    this.ghostList.forEach((ghost) => {
+      ghost.changeMode(newMode);
+    });
   }
 }
 

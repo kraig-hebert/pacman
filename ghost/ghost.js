@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(board, pacman, position, speed) {
+  constructor(board, mode, pacman, position, speed) {
     this.board = board;
     this.currentCellPreviousValue = 0;
     // up, down, left, right
@@ -10,9 +10,11 @@ class Ghost {
       { dx: 1, dy: 0 },
     ];
     this.interval = null;
+    this.mode = mode;
     this.queue = [{ x: position.x, y: position.y, path: [] }];
     this.pacman = pacman;
     this.position = position;
+    this.startingPosition = { ...position };
     this.speed = speed;
     this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
@@ -21,6 +23,20 @@ class Ghost {
   }
 
   move(removeEventListener) {
+    switch (this.mode) {
+      case "chase":
+        this.useChaseMode(removeEventListener);
+        break;
+      case "scatter":
+        break;
+      case "frightened":
+        break;
+      case "eaten":
+        break;
+    }
+  }
+
+  useChaseMode(removeEventListener) {
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
     this.visited = Array.from({ length: this.board.layout.length }, () =>
@@ -82,6 +98,8 @@ class Ghost {
     }
   }
 
+  useScatterMode(removeEventListener) {}
+
   beginMoving(removeEventListener) {
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
     this.interval = setInterval(
@@ -101,6 +119,10 @@ class Ghost {
 
   setSpeed(speed) {
     this.speed = speed;
+  }
+
+  changeMode(newMode) {
+    this.mode = newMode;
   }
 }
 
