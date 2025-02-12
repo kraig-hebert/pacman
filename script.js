@@ -55,7 +55,7 @@ const handlePacmanMove = (e) => pacman.move(e.key, removeKeydownEventListener);
 // start game
 startButton.addEventListener("click", () => {
   window.addEventListener("keydown", handlePacmanMove);
-  ghostController.startGhosts(removeKeydownEventListener);
+  ghostController.startAllGhosts(removeKeydownEventListener);
 });
 
 const handleLevelReset = (e) => {
@@ -68,7 +68,7 @@ const handleLevelReset = (e) => {
     else link.classList.remove("active-maze-button");
   });
   removeKeydownEventListener();
-  ghostController.stopGhosts();
+  ghostController.stopAllGhosts();
   board.resetBoard(activeMode.layout);
   ghostController.resetGhosts(
     board.findGhostPositions(),

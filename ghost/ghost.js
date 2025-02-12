@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(board, mode, pacman, position, speed) {
+  constructor(board, mode, pacman, position, speed, stopAllGhosts) {
     this.board = board;
     this.currentCellPreviousValue = 0;
     // up, down, left, right
@@ -15,28 +15,19 @@ class Ghost {
     this.pacman = pacman;
     this.position = position;
     this.startingPosition = { ...position };
+    this.removePacmanKeyDownEventListener = null;
+    this.startingPosition = { ...position };
     this.speed = speed;
+    this.startingSpeed = speed;
+    this.stopAllGhosts = stopAllGhosts;
+    this.target = pacman;
     this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
     );
     this.visited[position.y][position.x] = true;
   }
 
-  move(removeEventListener) {
-    switch (this.mode) {
-      case "chase":
-        this.useChaseMode(removeEventListener);
-        break;
-      case "scatter":
-        break;
-      case "frightened":
-        break;
-      case "eaten":
-        break;
-    }
-  }
-
-  useChaseMode(removeEventListener) {
+  move() {
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
     this.visited = Array.from({ length: this.board.layout.length }, () =>
@@ -48,8 +39,9 @@ class Ghost {
     while (this.queue.length > 0) {
       const { x, y, path } = this.queue.shift();
 
-      // If Pac-Man is found while exploring move ghost one square closer to pacman
-      if (x === this.pacman.position.x && y === this.pacman.position.y) {
+      // If target is found while exploring move ghost one square closer to target
+      if (x === this.target.position.x && y === this.target.position.y) {
+        console.log(this.target);
         const nextMove = path[0]; // Get the first move in the path
         if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
@@ -66,17 +58,19 @@ class Ghost {
 
         this.board.renderBoard();
       }
-      // check if ghost has caught pacman....end game
-      if (
-        this.position.x === this.pacman.position.x &&
-        this.position.y === this.pacman.position.y
-      ) {
-        this.stopMoving(); // Stop ghost movement
-        this.board.layout[this.position.y][this.position.x] = "G";
-        this.board.renderBoard();
-        alert("You lose Batty Boy");
-        removeEventListener();
-        return;
+      // check if ghost has caught target....end game if target is pacman
+      if ((this.mode !== "frightened") | (this.mode !== "eaten")) {
+        if (
+          this.position.x === this.target.position.x &&
+          this.position.y === this.target.position.y
+        ) {
+          this.stopAllGhosts(); // Stop ghost movement
+          this.board.layout[this.position.y][this.position.x] = "G";
+          this.board.renderBoard();
+          alert("You lose Batty Boy");
+          this.removePacmanKeyDownEventListener();
+          return;
+        }
       }
 
       // Explore neighbors
@@ -98,14 +92,37 @@ class Ghost {
     }
   }
 
-  useScatterMode(removeEventListener) {}
-
   beginMoving(removeEventListener) {
+    this.removePacmanKeyDownEventListener = removeEventListener;
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
     this.interval = setInterval(
-      () => this.move(removeEventListener),
-      this.speed
+      () => this.move(this.pacman),
+      this.startingSpeed
     );
+  }
+
+  resetMovement() {
+    switch (this.mode) {
+      case "chase":
+        this.speed = this.startingSpeed;
+        this.setTarget(this.pacman);
+        break;
+      case "scatter":
+        this.speed = this.startingSpeed;
+        break;
+      case "frightened":
+        this.speed = this.startingSpeed * 2;
+        break;
+      case "eaten":
+        this.speed = this.startingSpeed / 2;
+        this.setTarget(this.startingPosition);
+        break;
+      default:
+        this.speed = this.startingSpeed;
+    }
+
+    if (this.interval) clearInterval(this.interval); // prevents multiple intervals
+    this.interval = setInterval(() => this.move(), this.speed);
   }
 
   stopMoving() {
@@ -121,8 +138,14 @@ class Ghost {
     this.speed = speed;
   }
 
+  setTarget(target) {
+    this.target = { position: target };
+  }
+
   changeMode(newMode) {
+    console.log(newMode);
     this.mode = newMode;
+    this.resetMovement();
   }
 }
 

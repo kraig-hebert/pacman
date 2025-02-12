@@ -5,39 +5,58 @@ class GhostController {
     this.board = board;
     this.pacman = pacman;
     this.speed = speed;
-    this.mode = "chase"; // chase, scatter, frightened, eaten
-    this.ghostList = this.setGhostList(ghostPositionList);
+    // chase, scatter, frightened, eaten
+    this.mode = "chase";
+    this.ghosts = this.setGhosts(ghostPositionList);
   }
 
-  setGhostList(ghostPositionList) {
-    return ghostPositionList.map(
-      (position) =>
-        new Ghost(this.board, this.mode, this.pacman, position, this.speed)
+  setGhosts(ghostPositionList) {
+    const ghosts = {};
+    ghostPositionList.forEach(
+      (position, index) =>
+        (ghosts[index] = new Ghost(
+          this.board,
+          this.mode,
+          this.pacman,
+          position,
+          this.speed,
+          this.stopAllGhosts
+        ))
+    );
+    return ghosts;
+  }
+
+  startAllGhosts(removeEventListener) {
+    Object.keys(this.ghosts).forEach((key) =>
+      setTimeout(this.ghosts[key].beginMoving(removeEventListener), key * 1000)
     );
   }
 
-  startGhosts(removeEventListener) {
-    this.ghostList.forEach((ghost, index) =>
-      setTimeout(ghost.beginMoving(removeEventListener), index * 1000)
-    );
-  }
-
-  stopGhosts() {
-    this.ghostList.forEach((ghost) => ghost.stopMoving());
+  stopAllGhosts() {
+    Object.keys(this.ghosts).forEach((key) => this.ghosts[key].stopMoving());
   }
 
   resetGhosts(ghostPositionList, speed) {
-    this.ghostList = ghostPositionList.map(
-      (position) =>
-        new Ghost(this.board, this.mode, this.pacman, position, speed)
+    const ghosts = {};
+    ghostPositionList.forEach(
+      (position, index) =>
+        (ghosts[index] = new Ghost(
+          this.board,
+          this.mode,
+          this.pacman,
+          position,
+          speed,
+          this.stopAllGhosts
+        ))
     );
+    this.ghosts = ghosts;
   }
 
   changeMode(newMode) {
     this.mode = newMode;
-    this.ghostList.forEach((ghost) => {
-      ghost.changeMode(newMode);
-    });
+    Object.keys(this.ghosts).forEach((key) =>
+      this.ghosts[key].changeMode(newMode)
+    );
   }
 }
 

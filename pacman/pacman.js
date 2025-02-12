@@ -18,10 +18,10 @@ class Pacman {
   }
 
   activatePowerMode() {
-    console.log("powermode");
     this.scoreBoard.addPowerFoodPoint();
     this.ghostController.changeMode("frightened");
     this.mode = "power";
+    console.log(this.mode);
     this.powerModeTimeout = setTimeout(() => this.cancelPowerMode(), 10000);
   }
 
@@ -41,8 +41,6 @@ class Pacman {
     if (direction === "ArrowLeft") newX -= 1;
     if (direction === "ArrowRight") newX += 1;
 
-    // check is new position is a fruit
-
     // Check if the new position is not a wall
     if (this.board.layout[newY][newX] !== 1) {
       // check if the new position is a food pellet
@@ -57,7 +55,7 @@ class Pacman {
 
       // check if all food has been eaten and claim victory
       if (this.scoreBoard.totalFood === 0) {
-        this.ghostController.stopGhosts();
+        this.ghostController.stopAllGhosts();
 
         alert("You win Batty Boy");
         removeEventListener();
@@ -71,16 +69,17 @@ class Pacman {
     this.board.renderBoard();
 
     // check if pacman has run into any ghost
-    this.ghostController.ghostList.forEach((ghost) => {
-      if (this.mode === "normal") {
-        if (newX === ghost.position.x && newY === ghost.position.y) {
+    Object.keys(this.ghostController.ghosts).forEach((key) => {
+      if (
+        newX === this.ghostController.ghosts[key].position.x &&
+        newY === this.ghostController.ghosts[key].position.y
+      ) {
+        if (this.mode === "normal") {
           alert("You lose Batty Boy");
-          this.ghostController.stopGhosts();
+          this.ghostController.stopAllGhosts();
           removeEventListener();
           this.board.renderBoard();
-        }
-      } else if (this.mode === "power") {
-        if (newX === ghost.position.x && newY === ghost.position.y) {
+        } else if (this.mode === "power") {
           this.ghostController.changeMode("eaten");
           this.scoreBoard.addGhostPoint();
         }
