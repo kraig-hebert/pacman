@@ -114,13 +114,12 @@ class Ghost {
         this.speed = this.startingSpeed * 2;
         break;
       case "eaten":
-        this.speed = this.startingSpeed / 2;
+        this.speed = 100;
         this.setTarget(this.startingPosition);
         break;
       default:
         this.speed = this.startingSpeed;
     }
-
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
     this.interval = setInterval(() => this.move(), this.speed);
   }
@@ -143,7 +142,6 @@ class Ghost {
   }
 
   changeMode(newMode) {
-    console.log(newMode);
     this.mode = newMode;
     this.resetMovement();
   }

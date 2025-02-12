@@ -80,7 +80,7 @@ class Pacman {
           removeEventListener();
           this.board.renderBoard();
         } else if (this.mode === "power") {
-          this.ghostController.changeMode("eaten");
+          this.ghostController.ghosts[key].changeMode("eaten");
           this.scoreBoard.addGhostPoint();
         }
       }

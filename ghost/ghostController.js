@@ -36,6 +36,10 @@ class GhostController {
     Object.keys(this.ghosts).forEach((key) => this.ghosts[key].stopMoving());
   }
 
+  stopSingleGhost(key) {
+    this.ghosts[key].stopMoving();
+  }
+
   resetGhosts(ghostPositionList, speed) {
     const ghosts = {};
     ghostPositionList.forEach(
