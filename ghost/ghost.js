@@ -41,7 +41,6 @@ class Ghost {
 
       // If target is found while exploring move ghost one square closer to target
       if (x === this.target.position.x && y === this.target.position.y) {
-        console.log(this.target);
         const nextMove = path[0]; // Get the first move in the path
         if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
