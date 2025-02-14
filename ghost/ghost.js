@@ -1,6 +1,5 @@
 class Ghost {
-  constructor(board, mode, pacman, position, speed, stopAllGhosts) {
-    this.board = board;
+  constructor(mode, position, speed) {
     this.currentCellPreviousValue = 0;
     // up, down, left, right
     this.directions = [
@@ -12,15 +11,13 @@ class Ghost {
     this.interval = null;
     this.mode = mode;
     this.queue = [{ x: position.x, y: position.y, path: [] }];
-    this.pacman = pacman;
     this.position = position;
     this.startingPosition = { ...position };
     this.removePacmanKeyDownEventListener = null;
     this.startingPosition = { ...position };
     this.speed = speed;
     this.startingSpeed = speed;
-    this.stopAllGhosts = stopAllGhosts;
-    this.target = pacman;
+    this.target = null;
     this.visited = Array.from({ length: board.layout.length }, () =>
       Array(board.layout[0].length).fill(false)
     );
@@ -104,7 +101,7 @@ class Ghost {
     switch (this.mode) {
       case "chase":
         this.speed = this.startingSpeed;
-        this.setTarget(this.pacman);
+        this.setTarget(this.pacman.position);
         break;
       case "scatter":
         this.speed = this.startingSpeed;

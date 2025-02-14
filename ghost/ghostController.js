@@ -1,9 +1,7 @@
 import Ghost from "./ghost.js";
 
 class GhostController {
-  constructor(board, ghostPositionList, pacman, speed) {
-    this.board = board;
-    this.pacman = pacman;
+  constructor(ghostPositionList, speed) {
     this.speed = speed;
     // chase, scatter, frightened, eaten
     this.mode = "chase";
@@ -14,14 +12,7 @@ class GhostController {
     const ghosts = {};
     ghostPositionList.forEach(
       (position, index) =>
-        (ghosts[index] = new Ghost(
-          this.board,
-          this.mode,
-          this.pacman,
-          position,
-          this.speed,
-          this.stopAllGhosts
-        ))
+        (ghosts[index] = new Ghost(this.mode, position, this.speed))
     );
     return ghosts;
   }

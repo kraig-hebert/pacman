@@ -10,16 +10,13 @@ class Board {
     this.gameBoard.innerHTML = ""; // Clear board before rendering
 
     // create game board
-    this.layout.forEach((row, y) => {
-      row.forEach((cell, x) => {
+    this.layout.forEach((row) => {
+      row.forEach((cell) => {
         const div = document.createElement("div");
-        if (cell === 1) {
-          div.classList.add("wall");
-        } else if (cell === 2) {
-          div.classList.add("pellet");
-        } else if (cell === 3) {
-          div.classList.add("power-pellet");
-        } else if (cell === "P") {
+        if (cell === 1) div.classList.add("wall");
+        else if (cell === 2) div.classList.add("pellet");
+        else if (cell === 3) div.classList.add("power-pellet");
+        else if (cell === "P") {
           div.classList.add("pacman");
           div.textContent = "LB";
         } else if (cell === "G") {
@@ -33,9 +30,8 @@ class Board {
           div.id = "warp-east";
           div.classList.add("warp-square");
           div.textContent = ">";
-        } else {
-          div.classList.add("empty");
-        }
+        } else div.classList.add("empty");
+
         this.gameBoard.appendChild(div);
       });
     });
@@ -48,6 +44,10 @@ class Board {
     this.renderBoard();
     this.eastWarpPosition = this.findSingleElementPosition(">");
     this.westWarpPosition = this.findSingleElementPosition("<");
+  }
+
+  updateLayout(position, value) {
+    this.layout[position.y][position.x] = value;
   }
 
   findSingleElementPosition(element) {

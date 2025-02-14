@@ -1,12 +1,9 @@
 class Pacman {
-  constructor(board, points, position, scoreBoard) {
-    this.board = board;
+  constructor(position) {
     this.ghostController = null;
     this.mode = "normal"; // normal, power
-    this.points = points;
-    this.position = position;
+    this.position = position; // {x: 0, y: 0}
     this.powerModeTimeout = null; // Timeout for power mode duration
-    this.scoreBoard = scoreBoard;
   }
 
   setGhostController(ghostController) {
@@ -85,6 +82,10 @@ class Pacman {
         }
       }
     });
+  }
+
+  updateMode(mode) {
+    this.mode = mode;
   }
 }
 
