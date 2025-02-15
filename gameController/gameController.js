@@ -84,11 +84,61 @@ class GameController {
   }
 
   handlePacmanMove(e) {
-    this.pacman.move(e.key);
+    let { x, y } = this.pacman.position;
+    let newX = x;
+    let newY = y;
+
+    if (e.key === "ArrowUp") newY -= 1;
+    if (e.key === "ArrowDown") newY += 1;
+    if (e.key === "ArrowLeft") newX -= 1;
+    if (e.key === "ArrowRight") newX += 1;
+
+    // Check if the new position is not a wall
+    if (this.board.layout[newY][newX] !== 1) {
+      // check if the new position is a food pellet
+      if (this.board.layout[newY][newX] === 2) this.scoreBoard.addFoodPoint();
+      // check if the new position is a power food pellet and set mode to power
+      else if (this.board.layout[newY][newX] === 3)
+        this.pacman.activatePowerMode();
+      // check if warp square and warp pacman to opposite side of board
+      else if (this.board.layout[newY][newX] === "<")
+        newX = this.board.eastWarpPosition.x - 1;
+      else if (this.board.layout[newY][newX] === ">")
+        newX = this.board.westWarpPosition.x + 1;
+
+      // check if all food has been eaten and claim victory
+      if (this.scoreBoard.totalFood === 0) {
+        this.ghostController.stopAllGhosts();
+        alert("You win Batty Boy");
+      }
+      this.pointsDIV.innerText = this.scoreBoard.score;
+      this.board.layout[y][x] = 0; // clear old position
+      this.board.layout[newY][newX] = "P"; // Set new position
+      this.pacman.setPosition({ x: newX, y: newY });
+    }
+    this.board.renderBoard();
+
+    // check if pacman has run into any ghost
+    Object.keys(this.ghostController.ghosts).forEach((key) => {
+      if (
+        newX === this.ghostController.ghosts[key].position.x &&
+        newY === this.ghostController.ghosts[key].position.y
+      ) {
+        if (this.mode === "normal") {
+          alert("You lose Batty Boy");
+          this.ghostController.stopAllGhosts();
+          this.removeKeydownEventListener();
+          this.board.renderBoard();
+        } else if (this.mode === "power") {
+          this.ghostController.ghosts[key].changeMode("eaten");
+          this.scoreBoard.addGhostPoint();
+        }
+      }
+    });
   }
 
   initializeScoreBoard() {
-    return new ScoreBoard();
+    return new ScoreBoard(this.activeMode, this.board.getTotalFood());
   }
 
   updateScoreBoard(pointType) {
@@ -106,7 +156,7 @@ class GameController {
   }
 
   resetScoreBoard() {
-    this.scoreBoard.resetScoreBoard();
+    this.scoreBoard.resetScoreBoard(this.activeMode, this.board.getTotalFood());
   }
 
   resetGame(e, updateMazeLinks) {

@@ -1,14 +1,15 @@
 class ScoreBoard {
-  constructor(foodPoint, ghostPoint, powerFoodPoint, totalFood) {
-    this.foodPoint = foodPoint;
-    this.ghostPoint = ghostPoint;
-    this.powerFoodPoint = powerFoodPoint;
+  constructor(activeMode, totalFood) {
+    this.foodPoint = activeMode.foodPoint;
+    this.ghostPoint = activeMode.ghostPoint;
+    this.powerFoodPoint = activeMode.powerFoodPoint;
     this.score = 0;
     this.totalFood = totalFood;
   }
 
   resetScoreBoard(activeMode, totalFood, pointsElement) {
     this.foodPoint = activeMode.foodPoint;
+    this.ghostPoint = activeMode.ghostPoint;
     this.powerFoodPoint = activeMode.powerFoodPoint;
     this.score = 0;
     this.totalFood = totalFood;
