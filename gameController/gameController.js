@@ -114,6 +114,7 @@ class GameController {
     else if (e.target.id === "medium") this.activeMode = new Medium();
     else if (e.target.id === "hard") this.activeMode = new Hard();
     else if (e.target.id === "very-hard") this.activeMode = new VeryHard();
+    updateMazeLinks();
     this.ghostController.stopAllGhosts();
     this.removeKeydownEventListener();
     this.board.resetBoard(this.activeMode.layout);

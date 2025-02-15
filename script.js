@@ -14,7 +14,10 @@ const updateMazeLinks = () => {
   Array.from(mazeLinks).forEach((link) => {
     if (gameController.activeMode.name === link.id)
       link.classList.add("active-maze-button");
-    link.addEventListener("click", () => gameController.resetGame());
+    else link.classList.remove("active-maze-button");
+    link.addEventListener("click", (e) =>
+      gameController.resetGame(e, updateMazeLinks)
+    );
   });
 };
 
@@ -29,6 +32,6 @@ resetButton.addEventListener("click", () =>
     {
       target: { id: gameController.activeMode.name },
     },
-    updateMazeLinks
+    () => updateMazeLinks()
   )
 );
