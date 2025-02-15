@@ -48,7 +48,6 @@ class Board {
   }
 
   updateLayout(positionsToUpdate) {
-    console.log(positionsToUpdate);
     positionsToUpdate.forEach(
       ({ position, value }) => (this.layout[position.y][position.x] = value)
     );

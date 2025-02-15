@@ -109,24 +109,24 @@ class GameController {
     this.scoreBoard.resetScoreBoard();
   }
 
-  resetGame() {
-    // if (e.target.id === "easy") activeMode = new Easy();
-    // else if (e.target.id === "medium") activeMode = new Medium();
-    // else if (e.target.id === "hard") activeMode = new Hard();
-    // else if (e.target.id === "very-hard") activeMode = new VeryHard();
-    // Array.from(mazeLinks).forEach((link) => {
-    //   if (activeMode.name === link.id) link.classList.add("active-maze-button");
-    //   else link.classList.remove("active-maze-button");
-    // });
-    // removeKeydownEventListener();
-    // ghostController.stopAllGhosts();
-    // board.resetBoard(activeMode.layout);
-    // ghostController.resetGhosts(
-    //   board.findGhostPositions(),
-    //   activeMode.ghostSpeed
-    // );
-    // pacman.setPosition(board.findSingleElementPosition("P"));
-    // scoreBoard.resetScoreBoard(activeMode, board.getTotalFood(), points);
+  resetGame(e, updateMazeLinks) {
+    if (e.target.id === "easy") this.activeMode = new Easy();
+    else if (e.target.id === "medium") this.activeMode = new Medium();
+    else if (e.target.id === "hard") this.activeMode = new Hard();
+    else if (e.target.id === "very-hard") this.activeMode = new VeryHard();
+    this.ghostController.stopAllGhosts();
+    this.removeKeydownEventListener();
+    this.board.resetBoard(this.activeMode.layout);
+    this.ghostController.resetGhosts(
+      this.board.findGhostPositions(),
+      this.activeMode.ghostSpeed
+    );
+    this.pacman.setPosition(this.board.findSingleElementPosition("P"));
+    this.scoreBoard.resetScoreBoard(
+      this.activeMode,
+      this.board.getTotalFood(),
+      this.pointsDIV
+    );
   }
 
   startGame() {
