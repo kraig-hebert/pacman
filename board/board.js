@@ -47,8 +47,11 @@ class Board {
     this.westWarpPosition = this.findSingleElementPosition("<");
   }
 
-  updateLayout(position, value) {
-    this.layout[position.y][position.x] = value;
+  updateLayout(positionsToUpdate) {
+    console.log(positionsToUpdate);
+    positionsToUpdate.forEach(
+      ({ position, value }) => (this.layout[position.y][position.x] = value)
+    );
     this.renderBoard();
   }
 

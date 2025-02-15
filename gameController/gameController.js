@@ -51,21 +51,27 @@ class GameController {
 
   handleGhostMove(params) {
     const { key, newGhostPosition } = params;
-    console.log(key);
-    // end game if ghost catches pacman in chase or scatter mode
+    const selectedGhost = this.ghostController.ghosts[key];
     if (
       newGhostPosition.x === this.pacman.position.x &&
       newGhostPosition.y === this.pacman.position.y
     ) {
-      if (
-        this.ghostController.ghosts[key].mode === "chase" ||
-        this.ghostController.ghosts[key].mode === "scatter"
-      )
+      if (selectedGhost.mode === "chase" || selectedGhost.mode === "scatter")
         this.endGame();
-      else if (this.ghostController.ghosts[key].mode === "frightened")
-        this.ghostController.ghosts[key].changeMode("eaten");
+      else if (selectedGhost.mode === "frightened")
+        selectedGhost.changeMode("eaten");
     } else {
-      this.board.updateLayout(newGhostPosition, "G");
+      const nextCellValue =
+        this.board.layout[newGhostPosition.y][newGhostPosition.x];
+      this.board.updateLayout([
+        {
+          position: selectedGhost.position,
+          value: selectedGhost.currentCellPreviousValue,
+        },
+        { position: newGhostPosition, value: "G" },
+      ]);
+      selectedGhost.setPosition(newGhostPosition);
+      selectedGhost.setCurrentCellPreviousValue(nextCellValue);
     }
   }
 

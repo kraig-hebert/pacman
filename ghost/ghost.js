@@ -38,8 +38,10 @@ class Ghost {
         if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
         const newY = this.position.y + nextMove.dy;
-        this.position = { x: newX, y: newY };
-        handleGhostMove({ key: this.key, newGhostPosition: this.position });
+        handleGhostMove({
+          key: this.key,
+          newGhostPosition: { x: newX, y: newY },
+        });
         break;
       }
 
@@ -93,6 +95,10 @@ class Ghost {
   stopMoving() {
     clearInterval(this.interval);
     this.interval = null;
+  }
+
+  setCurrentCellPreviousValue(value) {
+    this.currentCellPreviousValue = value;
   }
 
   setPosition(position) {
