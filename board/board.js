@@ -4,6 +4,7 @@ class Board {
     this.gameBoard = gameBoard;
     this.layout = layout;
     this.westWarpPostition = this.findSingleElementPosition("<");
+    this.renderBoard();
   }
 
   renderBoard() {
@@ -48,6 +49,7 @@ class Board {
 
   updateLayout(position, value) {
     this.layout[position.y][position.x] = value;
+    this.renderBoard();
   }
 
   findSingleElementPosition(element) {

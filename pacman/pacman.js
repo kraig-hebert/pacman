@@ -1,13 +1,8 @@
 class Pacman {
   constructor(position) {
-    this.ghostController = null;
     this.mode = "normal"; // normal, power
     this.position = position; // {x: 0, y: 0}
     this.powerModeTimeout = null; // Timeout for power mode duration
-  }
-
-  setGhostController(ghostController) {
-    this.ghostController = ghostController;
   }
 
   setPosition(position) {
@@ -18,12 +13,10 @@ class Pacman {
     this.scoreBoard.addPowerFoodPoint();
     this.ghostController.changeMode("frightened");
     this.mode = "power";
-    console.log(this.mode);
     this.powerModeTimeout = setTimeout(() => this.cancelPowerMode(), 10000);
   }
 
   cancelPowerMode() {
-    console.log("cancelpower");
     this.mode = "normal";
     this.ghostController.changeMode("chase");
   }

@@ -1,25 +1,22 @@
 import Ghost from "./ghost.js";
 
 class GhostController {
-  constructor(ghostPositionList, speed) {
-    this.speed = speed;
-    // chase, scatter, frightened, eaten
-    this.mode = "chase";
-    this.ghosts = this.setGhosts(ghostPositionList);
+  constructor(params) {
+    this.ghosts = this.setGhosts(params);
   }
 
-  setGhosts(ghostPositionList) {
+  setGhosts(params) {
+    const { ghostPositionList, speed } = params;
     const ghosts = {};
     ghostPositionList.forEach(
-      (position, index) =>
-        (ghosts[index] = new Ghost(this.mode, position, this.speed))
+      (position, index) => (ghosts[index] = new Ghost(index, position, speed))
     );
     return ghosts;
   }
 
-  startAllGhosts(removeEventListener) {
+  startAllGhosts(params) {
     Object.keys(this.ghosts).forEach((key) =>
-      setTimeout(this.ghosts[key].beginMoving(removeEventListener), key * 1000)
+      setTimeout(() => this.ghosts[key].beginMoving(params), key * 1000)
     );
   }
 

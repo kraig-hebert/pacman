@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(mode, position, speed) {
+  constructor(key, position, speed) {
     this.currentCellPreviousValue = 0;
     // up, down, left, right
     this.directions = [
@@ -8,27 +8,23 @@ class Ghost {
       { dx: -1, dy: 0 },
       { dx: 1, dy: 0 },
     ];
+    this.key = key;
     this.interval = null;
-    this.mode = mode;
+    this.mode = "chase"; // chase, scatter, frightened, eaten
     this.queue = [{ x: position.x, y: position.y, path: [] }];
     this.position = position;
     this.startingPosition = { ...position };
-    this.removePacmanKeyDownEventListener = null;
-    this.startingPosition = { ...position };
     this.speed = speed;
     this.startingSpeed = speed;
-    this.target = null;
-    this.visited = Array.from({ length: board.layout.length }, () =>
-      Array(board.layout[0].length).fill(false)
-    );
-    this.visited[position.y][position.x] = true;
+    this.visited = null;
   }
 
-  move() {
+  move(params) {
+    const { boardLayout, handleGhostMove, targetPosition } = params;
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
-    this.visited = Array.from({ length: this.board.layout.length }, () =>
-      Array(this.board.layout[0].length).fill(false)
+    this.visited = Array.from({ length: boardLayout.length }, () =>
+      Array(boardLayout[0].length).fill(false)
     );
     this.visited[this.position.y][this.position.x] = true;
 
@@ -37,36 +33,14 @@ class Ghost {
       const { x, y, path } = this.queue.shift();
 
       // If target is found while exploring move ghost one square closer to target
-      if (x === this.target.position.x && y === this.target.position.y) {
+      if (x === targetPosition.x && y === targetPosition.y) {
         const nextMove = path[0]; // Get the first move in the path
         if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
         const newY = this.position.y + nextMove.dy;
-
-        // restore cell value to previous value of current cell
-        this.board.layout[this.position.y][this.position.x] =
-          this.currentCellPreviousValue;
-        // store next move cell value
-        this.currentCellPreviousValue = this.board.layout[newY][newX];
-        // Set new position
-        this.board.layout[newY][newX] = "G";
         this.position = { x: newX, y: newY };
-
-        this.board.renderBoard();
-      }
-      // check if ghost has caught target....end game if target is pacman
-      if ((this.mode !== "frightened") | (this.mode !== "eaten")) {
-        if (
-          this.position.x === this.target.position.x &&
-          this.position.y === this.target.position.y
-        ) {
-          this.stopAllGhosts(); // Stop ghost movement
-          this.board.layout[this.position.y][this.position.x] = "G";
-          this.board.renderBoard();
-          alert("You lose Batty Boy");
-          this.removePacmanKeyDownEventListener();
-          return;
-        }
+        handleGhostMove({ key: this.key, newGhostPosition: this.position });
+        break;
       }
 
       // Explore neighbors
@@ -75,11 +49,11 @@ class Ghost {
         const newY = y + dy;
 
         if (
-          this.board.layout[newY][newX] !== 1 && // Not a wall
-          this.board.layout[newY][newX] !== ">" && // Not a warp
-          this.board.layout[newY][newX] !== "<" && // Not a warp
+          boardLayout[newY][newX] !== 1 && // Not a wall
+          boardLayout[newY][newX] !== ">" && // Not a warp
+          boardLayout[newY][newX] !== "<" && // Not a warp
           !this.visited[newY][newX] && // Not already visited
-          this.board.layout[newY][newX] !== "G" // Avoid other ghosts
+          boardLayout[newY][newX] !== "G" // Avoid other ghosts
         ) {
           this.visited[newY][newX] = true;
           this.queue.push({ x: newX, y: newY, path: [...path, { dx, dy }] });
@@ -88,13 +62,9 @@ class Ghost {
     }
   }
 
-  beginMoving(removeEventListener) {
-    this.removePacmanKeyDownEventListener = removeEventListener;
+  beginMoving(params) {
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(
-      () => this.move(this.pacman),
-      this.startingSpeed
-    );
+    this.interval = setInterval(() => this.move(params), this.startingSpeed);
   }
 
   resetMovement() {
@@ -131,10 +101,6 @@ class Ghost {
 
   setSpeed(speed) {
     this.speed = speed;
-  }
-
-  setTarget(target) {
-    this.target = { position: target };
   }
 
   changeMode(newMode) {

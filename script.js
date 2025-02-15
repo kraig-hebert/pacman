@@ -12,8 +12,9 @@ const gameController = new GameController(gameBoard, points);
 
 // add eventListeners to maze links
 Array.from(mazeLinks).forEach((link) => {
-  if (activeMode.name === link.id) link.classList.add("active-maze-button");
-  link.addEventListener("click", handleLevelReset);
+  if (gameController.activeMode.name === link.id)
+    link.classList.add("active-maze-button");
+  link.addEventListener("click", () => gameController.resetGame());
 });
 
 // start game
