@@ -46,6 +46,20 @@ class GameController {
     return new GhostController({
       ghostPositionList: this.board.findGhostPositions(),
       speed: this.activeMode.ghostSpeed,
+      targetPosition: this.board.findSingleElementPosition("P"),
+    });
+  }
+
+  activateGhosts() {
+    Object.keys(this.ghostController.ghosts).forEach((key) => {
+      setTimeout(
+        () =>
+          this.ghostController.ghosts[key].beginMoving({
+            boardLayout: this.board.layout,
+            handleGhostMove: (params) => this.handleGhostMove(params),
+          }),
+        key * 1000
+      );
     });
   }
 
@@ -115,6 +129,7 @@ class GameController {
       this.board.layout[y][x] = 0; // clear old position
       this.board.layout[newY][newX] = "P"; // Set new position
       this.pacman.setPosition({ x: newX, y: newY });
+      this.ghostController.setGhostsTargetPosition(this.pacman.position);
     }
     this.board.renderBoard();
 
@@ -170,7 +185,8 @@ class GameController {
     this.board.resetBoard(this.activeMode.layout);
     this.ghostController.resetGhosts(
       this.board.findGhostPositions(),
-      this.activeMode.ghostSpeed
+      this.activeMode.ghostSpeed,
+      this.board.findSingleElementPosition("P")
     );
     this.pacman.setPosition(this.board.findSingleElementPosition("P"));
     this.scoreBoard.resetScoreBoard(
@@ -182,11 +198,7 @@ class GameController {
 
   startGame() {
     this.addKeydownEventListener();
-    this.ghostController.startAllGhosts({
-      boardLayout: this.board.layout,
-      handleGhostMove: (params) => this.handleGhostMove(params),
-      targetPosition: this.pacman.position,
-    });
+    this.activateGhosts();
   }
 
   endGame() {

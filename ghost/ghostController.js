@@ -6,18 +6,13 @@ class GhostController {
   }
 
   setGhosts(params) {
-    const { ghostPositionList, speed } = params;
+    const { ghostPositionList, speed, targetPosition } = params;
     const ghosts = {};
     ghostPositionList.forEach(
-      (position, index) => (ghosts[index] = new Ghost(index, position, speed))
+      (position, index) =>
+        (ghosts[index] = new Ghost(index, position, speed, targetPosition))
     );
     return ghosts;
-  }
-
-  startAllGhosts(params) {
-    Object.keys(this.ghosts).forEach((key) =>
-      setTimeout(() => this.ghosts[key].beginMoving(params), key * 1000)
-    );
   }
 
   stopAllGhosts() {
@@ -28,10 +23,17 @@ class GhostController {
     this.ghosts[key].stopMoving();
   }
 
-  resetGhosts(ghostPositionList, speed) {
+  setGhostsTargetPosition(targetPosition) {
+    Object.keys(this.ghosts).forEach((key) =>
+      this.ghosts[key].setTargetPosition(targetPosition)
+    );
+  }
+
+  resetGhosts(ghostPositionList, speed, targetPosition) {
     const ghosts = {};
     ghostPositionList.forEach(
-      (position, index) => (ghosts[index] = new Ghost(index, position, speed))
+      (position, index) =>
+        (ghosts[index] = new Ghost(index, position, speed, targetPosition))
     );
     this.ghosts = ghosts;
   }

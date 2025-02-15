@@ -1,5 +1,5 @@
 class Ghost {
-  constructor(key, position, speed) {
+  constructor(key, position, speed, targetPosition) {
     this.currentCellPreviousValue = 0;
     // up, down, left, right
     this.directions = [
@@ -16,11 +16,12 @@ class Ghost {
     this.startingPosition = { ...position };
     this.speed = speed;
     this.startingSpeed = speed;
+    this.targetPosition = targetPosition;
     this.visited = null;
   }
 
   move(params) {
-    const { boardLayout, handleGhostMove, targetPosition } = params;
+    const { boardLayout, handleGhostMove } = params;
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
     this.visited = Array.from({ length: boardLayout.length }, () =>
@@ -33,7 +34,7 @@ class Ghost {
       const { x, y, path } = this.queue.shift();
 
       // If target is found while exploring move ghost one square closer to target
-      if (x === targetPosition.x && y === targetPosition.y) {
+      if (x === this.targetPosition.x && y === this.targetPosition.y) {
         const nextMove = path[0]; // Get the first move in the path
         if (!nextMove) return;
         const newX = this.position.x + nextMove.dx;
@@ -107,6 +108,10 @@ class Ghost {
 
   setSpeed(speed) {
     this.speed = speed;
+  }
+
+  setTargetPosition(targetPosition) {
+    this.targetPosition = targetPosition;
   }
 
   changeMode(newMode) {
