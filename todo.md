@@ -1,1 +1,2 @@
-- add timeout clear for power when resetting
+- add timeout clear for powermode when resetting
+- add color change for ghosts when in different modes

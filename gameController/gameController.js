@@ -19,6 +19,7 @@ class GameController {
     this.pointsDIV = points;
     this.scoreBoard = this.initializeScoreBoard();
     this.handlePacmanMove = this.handlePacmanMove.bind(this);
+    this.powerModeTimeout = null;
   }
 
   addKeydownEventListener() {
@@ -156,6 +157,17 @@ class GameController {
       handleGhostMove: (params) => this.handleGhostMove(params),
       newMode: "frightened",
       targetPositions: this.board.powerFoodSquares,
+    });
+    this.powerModeTimeout = setTimeout(() => this.deactivatePowerMode(), 10000);
+  }
+
+  deactivatePowerMode() {
+    this.pacman.updateMode("normal");
+    this.ghostController.updateAllGhostsMode({
+      boardLayout: this.board.layout,
+      handleGhostMove: (params) => this.handleGhostMove(params),
+      newMode: "chase",
+      targetPosition: this.pacman.position,
     });
   }
 

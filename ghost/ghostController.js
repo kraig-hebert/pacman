@@ -48,7 +48,9 @@ class GhostController {
     Object.keys(this.ghosts).forEach((key) =>
       this.ghosts[key].changeMode({
         ...params,
-        targetPosition: params.targetPositions[key],
+        targetPosition: params.targetPosition
+          ? { ...params.targetPosition }
+          : params.targetPositions[key],
       })
     );
   }
