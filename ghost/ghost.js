@@ -22,6 +22,7 @@ class Ghost {
 
   move(params) {
     const { boardLayout, handleGhostMove } = params;
+
     // Reinitialize the queue and visited array each move to allow new search
     this.queue = [{ x: this.position.x, y: this.position.y, path: [] }];
     this.visited = Array.from({ length: boardLayout.length }, () =>
@@ -67,30 +68,15 @@ class Ghost {
 
   beginMoving(params) {
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(() => this.move(params), this.startingSpeed);
+    this.interval = setInterval(() => this.move(params), this.speed);
   }
 
-  resetMovement() {
-    switch (this.mode) {
-      case "chase":
-        this.speed = this.startingSpeed;
-        this.setTarget(this.pacman.position);
-        break;
-      case "scatter":
-        this.speed = this.startingSpeed;
-        break;
-      case "frightened":
-        this.speed = this.startingSpeed * 2;
-        break;
-      case "eaten":
-        this.speed = 100;
-        this.setTarget(this.startingPosition);
-        break;
-      default:
-        this.speed = this.startingSpeed;
-    }
-    if (this.interval) clearInterval(this.interval); // prevents multiple intervals
-    this.interval = setInterval(() => this.move(), this.speed);
+  resetMovement(params) {
+    if (this.mode === "chase" || this.mode === "scatter")
+      this.speed = this.startingSpeed;
+    else if (this.mode === "frightened") this.speed = this.startingSpeed * 2;
+    else if (this.mode === "eaten") this.speed = 100;
+    this.beginMoving(params);
   }
 
   stopMoving() {
@@ -103,7 +89,7 @@ class Ghost {
   }
 
   setPosition(position) {
-    this.position = position;
+    this.position = { ...position };
   }
 
   setSpeed(speed) {
@@ -111,12 +97,13 @@ class Ghost {
   }
 
   setTargetPosition(targetPosition) {
-    this.targetPosition = targetPosition;
+    this.targetPosition = { ...targetPosition };
   }
 
-  changeMode(newMode) {
-    this.mode = newMode;
-    this.resetMovement();
+  changeMode(params) {
+    this.mode = params.newMode;
+    this.targetPosition = { ...params.targetPosition };
+    this.resetMovement(params);
   }
 }
 

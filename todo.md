@@ -1,0 +1,1 @@
+- add timeout clear for power when resetting

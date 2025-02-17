@@ -44,22 +44,9 @@ class GameController {
 
   initializeGhostController() {
     return new GhostController({
-      ghostPositionList: this.board.findGhostPositions(),
+      ghostPositionList: this.board.findAllElementPositions("G"),
       speed: this.activeMode.ghostSpeed,
       targetPosition: this.board.findSingleElementPosition("P"),
-    });
-  }
-
-  activateGhosts() {
-    Object.keys(this.ghostController.ghosts).forEach((key) => {
-      setTimeout(
-        () =>
-          this.ghostController.ghosts[key].beginMoving({
-            boardLayout: this.board.layout,
-            handleGhostMove: (params) => this.handleGhostMove(params),
-          }),
-        key * 1000
-      );
     });
   }
 
@@ -89,9 +76,9 @@ class GameController {
     }
   }
 
-  updateAllGhostsMode(mode) {}
-
-  updateSingleGhostsMode(id, mode) {}
+  updateSingleGhostsMode(id, mode) {
+    Object.keys(this.ghostController.ghosts[key].up);
+  }
 
   initializePacman() {
     return new Pacman(this.board.findSingleElementPosition("P"));
@@ -112,8 +99,7 @@ class GameController {
       // check if the new position is a food pellet
       if (this.board.layout[newY][newX] === 2) this.scoreBoard.addFoodPoint();
       // check if the new position is a power food pellet and set mode to power
-      else if (this.board.layout[newY][newX] === 3)
-        this.pacman.activatePowerMode();
+      else if (this.board.layout[newY][newX] === 3) this.activatePowerMode();
       // check if warp square and warp pacman to opposite side of board
       else if (this.board.layout[newY][newX] === "<")
         newX = this.board.eastWarpPosition.x - 1;
@@ -126,10 +112,21 @@ class GameController {
         alert("You win Batty Boy");
       }
       this.pointsDIV.innerText = this.scoreBoard.score;
+      this.board.updateLayout([
+        {
+          position: { x, y },
+          value: 0,
+        },
+        { position: { x: newX, y: newY }, value: "P" },
+      ]);
       this.board.layout[y][x] = 0; // clear old position
       this.board.layout[newY][newX] = "P"; // Set new position
       this.pacman.setPosition({ x: newX, y: newY });
-      this.ghostController.setGhostsTargetPosition(this.pacman.position);
+      // reset all ghosts targetPosition if they are chasing you and not frightened
+      if (this.pacman.mode !== "power")
+        this.ghostController.setAllGhostsTargetPosition({
+          ...this.pacman.position,
+        });
     }
     this.board.renderBoard();
 
@@ -139,7 +136,7 @@ class GameController {
         newX === this.ghostController.ghosts[key].position.x &&
         newY === this.ghostController.ghosts[key].position.y
       ) {
-        if (this.mode === "normal") {
+        if (this.pacman.mode === "normal") {
           alert("You lose Batty Boy");
           this.ghostController.stopAllGhosts();
           this.removeKeydownEventListener();
@@ -149,6 +146,16 @@ class GameController {
           this.scoreBoard.addGhostPoint();
         }
       }
+    });
+  }
+
+  activatePowerMode() {
+    this.pacman.updateMode("power");
+    this.ghostController.updateAllGhostsMode({
+      boardLayout: this.board.layout,
+      handleGhostMove: (params) => this.handleGhostMove(params),
+      newMode: "frightened",
+      targetPositions: this.board.powerFoodSquares,
     });
   }
 
@@ -184,10 +191,11 @@ class GameController {
     this.removeKeydownEventListener();
     this.board.resetBoard(this.activeMode.layout);
     this.ghostController.resetGhosts(
-      this.board.findGhostPositions(),
+      this.board.findAllElementPositions("G"),
       this.activeMode.ghostSpeed,
       this.board.findSingleElementPosition("P")
     );
+    // add a clear of the powerModeTimeout once that is built
     this.pacman.setPosition(this.board.findSingleElementPosition("P"));
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
@@ -198,7 +206,11 @@ class GameController {
 
   startGame() {
     this.addKeydownEventListener();
-    this.activateGhosts();
+    this.ghostController.startAllGhosts({
+      boardLayout: this.board.layout,
+      handleGhostMove: (params) => this.handleGhostMove(params),
+      targetPosition: this.pacman.position,
+    });
   }
 
   endGame() {

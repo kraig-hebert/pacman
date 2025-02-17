@@ -3,6 +3,7 @@ class Board {
     this.eastWarpPosition = this.findSingleElementPosition(">");
     this.gameBoard = gameBoard;
     this.layout = layout;
+    this.powerFoodSquares = this.findAllElementPositions(3);
     this.westWarpPostition = this.findSingleElementPosition("<");
     this.renderBoard();
   }
@@ -45,6 +46,7 @@ class Board {
     this.renderBoard();
     this.eastWarpPosition = this.findSingleElementPosition(">");
     this.westWarpPosition = this.findSingleElementPosition("<");
+    this.powerFoodSquares = this.findAllElementPositions(3);
   }
 
   updateLayout(positionsToUpdate) {
@@ -65,15 +67,15 @@ class Board {
     return { x, y };
   }
 
-  findGhostPositions() {
-    const ghostPositionList = [];
+  findAllElementPositions(elementType) {
+    const elementPositionList = [];
     this.layout.forEach((row, rowIndex) => {
       row.forEach((element, elementIndex) => {
-        if (element === "G")
-          ghostPositionList.push({ x: elementIndex, y: rowIndex });
+        if (element === elementType)
+          elementPositionList.push({ x: elementIndex, y: rowIndex });
       });
     });
-    return ghostPositionList;
+    return elementPositionList;
   }
 
   getTotalFood() {

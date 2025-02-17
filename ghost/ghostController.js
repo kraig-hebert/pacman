@@ -15,6 +15,12 @@ class GhostController {
     return ghosts;
   }
 
+  startAllGhosts(params) {
+    Object.keys(this.ghosts).forEach((key) => {
+      setTimeout(() => this.ghosts[key].beginMoving(params), key * 1000);
+    });
+  }
+
   stopAllGhosts() {
     Object.keys(this.ghosts).forEach((key) => this.ghosts[key].stopMoving());
   }
@@ -23,7 +29,7 @@ class GhostController {
     this.ghosts[key].stopMoving();
   }
 
-  setGhostsTargetPosition(targetPosition) {
+  setAllGhostsTargetPosition(targetPosition) {
     Object.keys(this.ghosts).forEach((key) =>
       this.ghosts[key].setTargetPosition(targetPosition)
     );
@@ -38,10 +44,12 @@ class GhostController {
     this.ghosts = ghosts;
   }
 
-  changeMode(newMode) {
-    this.mode = newMode;
+  updateAllGhostsMode(params) {
     Object.keys(this.ghosts).forEach((key) =>
-      this.ghosts[key].changeMode(newMode)
+      this.ghosts[key].changeMode({
+        ...params,
+        targetPosition: params.targetPositions[key],
+      })
     );
   }
 }
