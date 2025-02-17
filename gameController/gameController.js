@@ -151,6 +151,7 @@ class GameController {
   }
 
   activatePowerMode() {
+    if (this.powerModeTimeout) clearTimeout(this.powerModeTimeout);
     this.pacman.updateMode("power");
     this.ghostController.updateAllGhostsMode({
       boardLayout: this.board.layout,
