@@ -4,7 +4,6 @@ class ScoreBoard {
     this.ghostPoint = activeMode.ghostPoint;
     this.powerFoodPoint = activeMode.powerFoodPoint;
     this.score = 0;
-    this.totalFood = totalFood;
   }
 
   resetScoreBoard(activeMode, totalFood, pointsElement) {
@@ -12,13 +11,11 @@ class ScoreBoard {
     this.ghostPoint = activeMode.ghostPoint;
     this.powerFoodPoint = activeMode.powerFoodPoint;
     this.score = 0;
-    this.totalFood = totalFood;
     pointsElement.innerText = this.score;
   }
 
   addFoodPoint() {
     this.score += this.foodPoint;
-    this.subtractFromTotalFood(1);
   }
 
   addGhostPoint() {
@@ -27,10 +24,6 @@ class ScoreBoard {
 
   addPowerFoodPoint() {
     this.score += this.powerFoodPoint;
-  }
-
-  subtractFromTotalFood(amount) {
-    this.totalFood -= amount;
   }
 }
 

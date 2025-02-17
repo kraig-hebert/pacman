@@ -108,7 +108,7 @@ class GameController {
         newX = this.board.westWarpPosition.x + 1;
 
       // check if all food has been eaten and claim victory
-      if (this.scoreBoard.totalFood === 0) {
+      if (this.board.getTotalFood() === 0) {
         this.ghostController.stopAllGhosts();
         alert("You win Batty Boy");
       }
@@ -142,8 +142,14 @@ class GameController {
           this.ghostController.stopAllGhosts();
           this.removeKeydownEventListener();
           this.board.renderBoard();
-        } else if (this.mode === "power") {
-          this.ghostController.ghosts[key].changeMode("eaten");
+        } else if (this.pacman.mode === "power") {
+          this.ghostController.updateSingleGhostMode({
+            boardLayout: this.board.layout,
+            handleGhostMove: (params) => this.handleGhostMove(params),
+            key,
+            newMode: "eaten",
+            targetPosition: this.ghostController.ghosts[key].startingPosition,
+          });
           this.scoreBoard.addGhostPoint();
         }
       }
