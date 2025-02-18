@@ -63,15 +63,17 @@ class Ghost {
             this.visited[newY][newX] = true;
             this.queue.push({ x: newX, y: newY, path: [...path, { dx, dy }] });
           }
-        } else if (
-          boardLayout[newY][newX] !== 1 && // Not a wall
-          boardLayout[newY][newX] !== ">" && // Not a warp
-          boardLayout[newY][newX] !== "<" && // Not a warp
-          !this.visited[newY][newX] // Not already visited
-          // no need to avoid ghosts in
-        ) {
-          this.visited[newY][newX] = true;
-          this.queue.push({ x: newX, y: newY, path: [...path, { dx, dy }] });
+        } else if (this.mode === "eaten" || this.mode === "frightened") {
+          if (
+            boardLayout[newY][newX] !== 1 && // Not a wall
+            boardLayout[newY][newX] !== ">" && // Not a warp
+            boardLayout[newY][newX] !== "<" && // Not a warp
+            !this.visited[newY][newX] // Not already visited
+            // no need to avoid ghosts in
+          ) {
+            this.visited[newY][newX] = true;
+            this.queue.push({ x: newX, y: newY, path: [...path, { dx, dy }] });
+          }
         }
       }
     }
