@@ -211,7 +211,6 @@ class GameController {
       this.board.findSingleElementPosition("P")
     );
     clearTimeout(this.powerModeTimeout);
-    this.deactivatePowerMode();
     this.pacman.setPosition(this.board.findSingleElementPosition("P"));
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
