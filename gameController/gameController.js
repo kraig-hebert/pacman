@@ -77,10 +77,6 @@ class GameController {
     }
   }
 
-  updateSingleGhostsMode(id, mode) {
-    Object.keys(this.ghostController.ghosts[key].up);
-  }
-
   initializePacman() {
     return new Pacman(this.board.findSingleElementPosition("P"));
   }
@@ -214,7 +210,8 @@ class GameController {
       this.activeMode.ghostSpeed,
       this.board.findSingleElementPosition("P")
     );
-    // add a clear of the powerModeTimeout once that is built
+    clearTimeout(this.powerModeTimeout);
+    this.deactivatePowerMode();
     this.pacman.setPosition(this.board.findSingleElementPosition("P"));
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
