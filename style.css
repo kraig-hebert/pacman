@@ -173,6 +173,10 @@ body h1 {
   line-height: 30px;
 }
 
+.ghost-active {
+  color: blue;
+}
+
 .warp-square {
   display: flex;
   justify-content: center;

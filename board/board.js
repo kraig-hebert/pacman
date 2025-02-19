@@ -3,6 +3,7 @@ class Board {
     this.eastWarpPosition = this.findSingleElementPosition(">");
     this.gameBoard = gameBoard;
     this.layout = layout;
+    this.powerMode = false;
     this.powerFoodSquares = this.findAllElementPositions(3);
     this.westWarpPostition = this.findSingleElementPosition("<");
     this.renderBoard();
@@ -23,6 +24,7 @@ class Board {
           div.textContent = "LB";
         } else if (cell === "G") {
           div.classList.add("ghost");
+          if (this.powerMode) div.classList.add("ghost-active");
           div.textContent = "KH";
         } else if (cell === "<") {
           div.id = "warp-west";
@@ -80,6 +82,14 @@ class Board {
 
   getTotalFood() {
     return this.layout.flat().filter((cell) => cell === 2).length;
+  }
+
+  activatePowerMode() {
+    this.powerMode = true;
+  }
+
+  deactivatePowerMode() {
+    this.powerMode = false;
   }
 }
 export default Board;

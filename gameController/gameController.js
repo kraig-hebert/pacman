@@ -41,7 +41,7 @@ class GameController {
   }
 
   initializeBoard(gameBoard) {
-    return new Board(gameBoard, this.activeMode.layout);
+    return new Board(gameBoard, this.activeMode.layout, this.check);
   }
 
   renderBoard() {
@@ -173,6 +173,7 @@ class GameController {
       newMode: "frightened",
       targetPositions: this.board.powerFoodSquares,
     });
+    this.board.activatePowerMode();
     this.powerModeTimeout = setTimeout(() => this.deactivatePowerMode(), 10000);
   }
 
@@ -184,6 +185,7 @@ class GameController {
       newMode: "chase",
       targetPosition: this.pacman.position,
     });
+    this.board.deactivatePowerMode();
   }
 
   initializeScoreBoard() {
