@@ -140,6 +140,7 @@ class Hard {
     ];
     this.name = "hard";
     this.ghostSpeed = 400;
+    this.pacmanSpeed = 500;
     this.powerFoodPoint = 8;
   }
 }

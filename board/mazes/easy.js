@@ -17,6 +17,7 @@ class Easy {
     ];
     this.name = "easy";
     this.ghostSpeed = 1000;
+    this.pacmanSpeed = 1100;
     this.powerFoodPoint = 2;
   }
 }

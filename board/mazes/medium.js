@@ -21,6 +21,7 @@ class Medium {
     ];
     this.name = "medium";
     this.ghostSpeed = 700;
+    this.pacmanSpeed = 800;
     this.powerFoodPoint = 4;
   }
 }
