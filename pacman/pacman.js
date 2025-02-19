@@ -24,6 +24,11 @@ class Pacman {
     this.interval = setInterval(() => this.move(params), this.speed);
   }
 
+  stopMoving() {
+    if (this.interval) clearInterval(this.interval);
+    this.interval = null;
+  }
+
   setDirection(newDirection) {
     this.direction = newDirection;
   }

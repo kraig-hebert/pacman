@@ -2,6 +2,11 @@ class Easy {
   constructor() {
     this.foodPoint = 1;
     this.ghostPoint = 3;
+    this.name = "easy";
+    this.ghostSpeed = 700;
+    this.pacmanSpeed = 675;
+    this.powerFoodPoint = 2;
+
     this.layout = [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 3, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -15,10 +20,6 @@ class Easy {
       [1, 2, 2, 2, 2, 2, 2, 2, 3, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    this.name = "easy";
-    this.ghostSpeed = 1000;
-    this.pacmanSpeed = 1100;
-    this.powerFoodPoint = 2;
   }
 }
 

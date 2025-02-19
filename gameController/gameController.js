@@ -14,6 +14,7 @@ class GameController {
   constructor(gameBoard, points) {
     this.activeMode = new Easy();
     this.board = this.initializeBoard(gameBoard);
+    this.gameActive = false;
     this.ghostController = this.initializeGhostController();
     this.pacman = this.initializePacman();
     this.pointsDIV = points;
@@ -29,6 +30,14 @@ class GameController {
 
   removeKeydownEventListener() {
     window.removeEventListener("keydown", this.handleKeydownEventListener);
+  }
+
+  setGameActive() {
+    this.gameActive = true;
+  }
+
+  deactivateGame() {
+    this.gameActive = false;
   }
 
   initializeBoard(gameBoard) {
@@ -87,6 +96,13 @@ class GameController {
   }
 
   handleKeydownEventListener(e) {
+    if (!this.gameActive) {
+      this.ghostController.startAllGhosts({
+        boardLayout: this.board.layout,
+        handleGhostMove: (params) => this.handleGhostMove(params),
+      });
+      this.setGameActive();
+    }
     if (e.key !== this.pacman.direction) this.pacman.setDirection(e.key);
     this.pacman.beginMoving((position) => this.handlePacmanMove(position));
   }
@@ -125,7 +141,7 @@ class GameController {
         });
     }
 
-    this.board.renderBoard();
+    this.renderBoard();
 
     // check if pacman has run into any ghost
     Object.keys(this.ghostController.ghosts).forEach((key) => {
@@ -133,12 +149,8 @@ class GameController {
         newX === this.ghostController.ghosts[key].position.x &&
         newY === this.ghostController.ghosts[key].position.y
       ) {
-        if (this.pacman.mode === "normal") {
-          alert("You lose Batty Boy");
-          this.ghostController.stopAllGhosts();
-          this.removeKeydownEventListener();
-          this.board.renderBoard();
-        } else if (this.pacman.mode === "power") {
+        if (this.pacman.mode === "normal") this.endGame();
+        else if (this.pacman.mode === "power") {
           this.ghostController.updateSingleGhostMode({
             boardLayout: this.board.layout,
             handleGhostMove: (params) => this.handleGhostMove(params),
@@ -201,9 +213,9 @@ class GameController {
     else if (e.target.id === "medium") this.activeMode = new Medium();
     else if (e.target.id === "hard") this.activeMode = new Hard();
     else if (e.target.id === "very-hard") this.activeMode = new VeryHard();
-    updateMazeLinks();
+    this.deactivateGame();
+    this.pacman.stopMoving();
     this.ghostController.stopAllGhosts();
-    this.removeKeydownEventListener();
     this.board.resetBoard(this.activeMode.layout);
     this.ghostController.resetGhosts(
       this.board.findAllElementPositions("G"),
@@ -217,9 +229,12 @@ class GameController {
       this.board.getTotalFood(),
       this.pointsDIV
     );
+    this.addKeydownEventListener();
+    updateMazeLinks();
   }
 
   startGame() {
+    this.setGameActive();
     this.addKeydownEventListener();
     this.ghostController.startAllGhosts({
       boardLayout: this.board.layout,
@@ -229,9 +244,12 @@ class GameController {
   }
 
   endGame() {
-    this.removeKeydownEventListener();
-    this.ghostController.stopAllGhosts();
     alert("You lose Batty Boy");
+    this.pacman.stopMoving();
+    this.ghostController.stopAllGhosts();
+    this.removeKeydownEventListener();
+    this.renderBoard();
+    this.deactivateGame();
   }
 }
 

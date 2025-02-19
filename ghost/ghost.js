@@ -93,7 +93,7 @@ class Ghost {
   }
 
   stopMoving() {
-    clearInterval(this.interval);
+    if (this.interval) clearInterval(this.interval);
     this.interval = null;
   }
 
