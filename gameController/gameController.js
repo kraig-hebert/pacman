@@ -104,7 +104,9 @@ class GameController {
       this.setGameActive();
     }
     if (e.key !== this.pacman.direction) this.pacman.setDirection(e.key);
-    this.pacman.beginMoving((position) => this.handlePacmanMove(position));
+    this.pacman.beginMoving({
+      handlePacmanMove: (position) => this.handlePacmanMove(position),
+    });
   }
 
   handlePacmanMove(position) {

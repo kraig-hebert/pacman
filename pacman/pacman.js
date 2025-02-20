@@ -1,6 +1,7 @@
 class Pacman {
   constructor(position, speed) {
     this.direction = null;
+    this.previousDirection = null;
     this.directions = {
       ArrowUp: { dx: 0, dy: -1 },
       ArrowDown: { dx: 0, dy: 1 },
@@ -13,9 +14,10 @@ class Pacman {
     this.speed = speed;
   }
 
-  move(handlePacmanMove) {
-    const newX = this.position.x + this.directions[this.direction].dx;
-    const newY = this.position.y + this.directions[this.direction].dy;
+  move(params) {
+    const { handlePacmanMove } = params;
+    const newX = this.position.x + this.directions[direction].dx;
+    const newY = this.position.y + this.directions[direction].dy;
     handlePacmanMove({ newX, newY });
   }
 
@@ -30,7 +32,12 @@ class Pacman {
   }
 
   setDirection(newDirection) {
+    this.setPreviousDirection(this.direction);
     this.direction = newDirection;
+  }
+
+  setPreviousDirection(previousDirection) {
+    this.previousDirection = previousDirection;
   }
 
   setMode(newMode) {
