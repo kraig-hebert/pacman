@@ -102,11 +102,18 @@ class GameController {
         handleGhostMove: (params) => this.handleGhostMove(params),
       });
       this.setGameActive();
+    } else {
+      if (this.board.checkIfWall(direction, this.pacman.position)) {
+        this.pacman.setNextDirection(direction);
+      } else {
+        if (e.key !== this.pacman.direction) {
+          this.pacman.setDirection(e.key);
+          this.pacman.beginMoving({
+            handlePacmanMove: (position) => this.handlePacmanMove(position),
+          });
+        }
+      }
     }
-    if (e.key !== this.pacman.direction) this.pacman.setDirection(e.key);
-    this.pacman.beginMoving({
-      handlePacmanMove: (position) => this.handlePacmanMove(position),
-    });
   }
 
   handlePacmanMove(position) {
@@ -141,6 +148,11 @@ class GameController {
         this.ghostController.setAllGhostsTargetPosition({
           ...this.pacman.position,
         });
+    } else if (result === 1) {
+      this.pacman.resetDirectionAfterStop();
+      this.pacman.beginMoving({
+        handlePacmanMove: (params) => this.handlePacmanMove(params),
+      });
     }
 
     this.renderBoard();

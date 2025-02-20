@@ -91,5 +91,11 @@ class Board {
   deactivatePowerMode() {
     this.powerMode = false;
   }
+
+  checkIfWall(direction, pacmanPosition) {
+    const newX = pacmanPosition.x + this.directions[direction].dx;
+    const newY = pacmanPosition.y + this.directions[direction].dy;
+    return this.layout[newY][newX] === 1;
+  }
 }
 export default Board;
