@@ -230,7 +230,10 @@ class GameController {
     else if (e.target.id === "very-hard") this.activeMode = new VeryHard();
     this.deactivateGame();
     this.board.resetBoard(this.activeMode.layout);
-    this.pacman.resetPacman(this.board.findSingleElementPosition("P"));
+    this.pacman.resetPacman(
+      this.board.findSingleElementPosition("P"),
+      this.activeMode.ghostSpeed
+    );
     this.ghostController.stopAllGhosts();
     this.ghostController.resetGhosts(
       this.board.findAllElementPositions("G"),

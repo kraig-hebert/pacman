@@ -1,1 +1,2 @@
-
+- update pacman movement
+  - if a direction is pressed that is a wall pacman should turn at the next intersection and not when it reaches the next wall

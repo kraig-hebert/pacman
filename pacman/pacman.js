@@ -53,10 +53,12 @@ class Pacman {
     this.position = position;
   }
 
-  resetPacman(pacmanPosition) {
+  resetPacman(pacmanPosition, speed) {
     this.stopMoving();
     this.setPosition(pacmanPosition);
     this.setDirection(null);
+    this.mode = "normal";
+    this.speed = speed;
   }
 }
 

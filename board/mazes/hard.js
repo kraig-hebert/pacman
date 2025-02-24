@@ -4,7 +4,7 @@ class Hard {
     this.ghostPoint = 12;
     this.name = "hard";
     this.ghostSpeed = 350;
-    this.pacmanSpeed = 349;
+    this.pacmanSpeed = 345;
     this.powerFoodPoint = 8;
     this.layout = [
       [
