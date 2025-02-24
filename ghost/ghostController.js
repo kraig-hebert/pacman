@@ -36,6 +36,7 @@ class GhostController {
   }
 
   resetGhosts(ghostPositionList, speed, targetPosition) {
+    this.stopAllGhosts();
     const ghosts = {};
     ghostPositionList.forEach(
       (position, index) =>

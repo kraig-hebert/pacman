@@ -234,13 +234,11 @@ class GameController {
       this.board.findSingleElementPosition("P"),
       this.activeMode.ghostSpeed
     );
-    this.ghostController.stopAllGhosts();
     this.ghostController.resetGhosts(
       this.board.findAllElementPositions("G"),
       this.activeMode.ghostSpeed,
       this.board.findSingleElementPosition("P")
     );
-    if (this.powerModeTimeout) clearTimeout(this.powerModeTimeout);
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
       this.board.getTotalFood(),
@@ -248,6 +246,7 @@ class GameController {
     );
     this.addKeydownEventListener();
     updateMazeLinks();
+    if (this.powerModeTimeout) clearTimeout(this.powerModeTimeout);
   }
 
   startGame() {
