@@ -52,6 +52,12 @@ class Pacman {
   setPosition(position) {
     this.position = position;
   }
+
+  resetPacman(pacmanPosition) {
+    this.stopMoving();
+    this.setPosition(pacmanPosition);
+    this.setDirection(null);
+  }
 }
 
 export default Pacman;

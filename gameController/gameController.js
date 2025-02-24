@@ -229,17 +229,15 @@ class GameController {
     else if (e.target.id === "hard") this.activeMode = new Hard();
     else if (e.target.id === "very-hard") this.activeMode = new VeryHard();
     this.deactivateGame();
-    this.pacman.stopMoving();
-    this.ghostController.stopAllGhosts();
     this.board.resetBoard(this.activeMode.layout);
+    this.pacman.resetPacman(this.board.findSingleElementPosition("P"));
+    this.ghostController.stopAllGhosts();
     this.ghostController.resetGhosts(
       this.board.findAllElementPositions("G"),
       this.activeMode.ghostSpeed,
       this.board.findSingleElementPosition("P")
     );
     if (this.powerModeTimeout) clearTimeout(this.powerModeTimeout);
-    this.pacman.setPosition(this.board.findSingleElementPosition("P"));
-    this.pacman.setDirection(null);
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
       this.board.getTotalFood(),
