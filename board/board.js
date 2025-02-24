@@ -92,9 +92,9 @@ class Board {
     this.powerMode = false;
   }
 
-  checkIfWall(direction, pacmanPosition) {
-    const newX = pacmanPosition.x + this.directions[direction].dx;
-    const newY = pacmanPosition.y + this.directions[direction].dy;
+  checkIfWall(direction, pacman) {
+    const newX = pacman.position.x + pacman.directions[direction].dx;
+    const newY = pacman.position.y + pacman.directions[direction].dy;
     return this.layout[newY][newX] === 1;
   }
 }

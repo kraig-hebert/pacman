@@ -102,16 +102,15 @@ class GameController {
         handleGhostMove: (params) => this.handleGhostMove(params),
       });
       this.setGameActive();
+    }
+    if (this.board.checkIfWall(e.key, this.pacman)) {
+      this.pacman.setNextDirection(e.key);
     } else {
-      if (this.board.checkIfWall(direction, this.pacman.position)) {
-        this.pacman.setNextDirection(direction);
-      } else {
-        if (e.key !== this.pacman.direction) {
-          this.pacman.setDirection(e.key);
-          this.pacman.beginMoving({
-            handlePacmanMove: (position) => this.handlePacmanMove(position),
-          });
-        }
+      if (e.key !== this.pacman.direction) {
+        this.pacman.setDirection(e.key);
+        this.pacman.beginMoving({
+          handlePacmanMove: (position) => this.handlePacmanMove(position),
+        });
       }
     }
   }
@@ -240,6 +239,7 @@ class GameController {
     );
     if (this.powerModeTimeout) clearTimeout(this.powerModeTimeout);
     this.pacman.setPosition(this.board.findSingleElementPosition("P"));
+    this.pacman.setDirection(null);
     this.scoreBoard.resetScoreBoard(
       this.activeMode,
       this.board.getTotalFood(),
