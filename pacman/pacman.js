@@ -16,13 +16,12 @@ class Pacman {
 
   move(params) {
     const { handlePacmanMove } = params;
-    const newX = this.position.x + this.directions[this.direction].dx;
-    const newY = this.position.y + this.directions[this.direction].dy;
+    let newX = this.position.x + this.directions[this.direction].dx;
+    let newY = this.position.y + this.directions[this.direction].dy;
     handlePacmanMove({ newX, newY });
   }
 
   beginMoving(params) {
-    console.log(params);
     if (this.interval) clearInterval(this.interval); // prevents multiple intervals
     this.interval = setInterval(() => this.move(params), this.speed);
   }

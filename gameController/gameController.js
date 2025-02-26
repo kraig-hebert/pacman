@@ -103,7 +103,22 @@ class GameController {
       });
       this.setGameActive();
     }
-    if (this.board.checkIfWall(e.key, this.pacman)) {
+
+    if (this.pacman.nextDirection) {
+      if (
+        this.board.checkIfWall({
+          direction: this.pacman.nextDirection,
+          pacman: this.pacman,
+        })
+      ) {
+        this.pacman.setDirection(this.pacman.nextDirection);
+        this.pacman.beginMoving({
+          handlePacmanMove: (position) => this.handlePacmanMove(position),
+        });
+      }
+    } else if (
+      this.board.checkIfWall({ direction: e.key, pacman: this.pacman })
+    ) {
       this.pacman.setNextDirection(e.key);
     } else {
       if (e.key !== this.pacman.direction) {
@@ -131,7 +146,7 @@ class GameController {
       // check if all food has been eaten and claim victory
       if (this.board.getTotalFood() === 0) {
         this.ghostController.stopAllGhosts();
-        alert("You win Batty Boy");
+        alert("You win");
       }
       this.pointsDIV.innerText = this.scoreBoard.score;
       this.board.updateLayout([
@@ -150,7 +165,7 @@ class GameController {
     } else if (result === 1) {
       this.pacman.resetDirectionAfterStop();
       this.pacman.beginMoving({
-        handlePacmanMove: (params) => this.handlePacmanMove(params),
+        handlePacmanMove: (position) => this.handlePacmanMove(position),
       });
     }
 

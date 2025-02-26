@@ -115,7 +115,7 @@ class Ghost {
 
   changeMode(params) {
     this.mode = params.newMode;
-    this.targetPosition = { ...params.targetPosition };
+    this.setTargetPosition = { ...params.targetPosition };
     this.resetMovement(params);
   }
 }

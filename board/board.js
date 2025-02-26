@@ -92,7 +92,8 @@ class Board {
     this.powerMode = false;
   }
 
-  checkIfWall(direction, pacman) {
+  checkIfWall(params) {
+    const { direction, pacman } = params;
     const newX = pacman.position.x + pacman.directions[direction].dx;
     const newY = pacman.position.y + pacman.directions[direction].dy;
     return this.layout[newY][newX] === 1;
